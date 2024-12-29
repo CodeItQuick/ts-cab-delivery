@@ -1,16 +1,14 @@
-import {PrismaClient} from "@prisma/client";
+import prisma from "./client";
 
 // type cabStatus = 'Available' | 'TransportingCustomer' | 'CustomerRideRequested';
 
-function addCab() {
-    const prismaClient = new PrismaClient();
-    prismaClient.cabs.create({
+async function addCab() {
+    return prisma.cabs.create({
         data: {
             CabName: "Evan's Cab",
             Status: "Available"
         }
-    })
-    return true;
+    });
 }
 
 export { addCab };

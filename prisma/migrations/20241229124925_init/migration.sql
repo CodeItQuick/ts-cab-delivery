@@ -1,0 +1,6 @@
+-- CreateTable
+CREATE TABLE "Cabs" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "CabName" TEXT NOT NULL,
+    "Status" TEXT NOT NULL
+);
