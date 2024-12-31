@@ -1,6 +1,6 @@
 import { testPrintLnObj } from "../src/printLn";
 import program from "../src/program";
-import { addCab } from "../src/dispatchController";
+import {addCab, removeCab} from "../src/dispatchController";
 import {describe, test, expect, vi} from 'vitest';
 import prisma from '../src/__mocks__/client'
 vi.mock('../src/client')
@@ -44,5 +44,25 @@ describe("End to end tests", () => {
             CabName: cab.CabName,
             Status: cab.Status
         }})
+    })
+    test("the removeCab method creates a new cab in the database", async () => {
+        const cab = {
+            id: 1,
+            CabName: "Evan's Cab",
+            Status: "Available"
+        }
+        const cabs = prisma.cabs;
+        cabs.aggregate.mockResolvedValue({ _min: cab, _count: undefined, _avg: undefined, _sum: undefined, _max: undefined })
+        cabs.delete.mockResolvedValue(cab);
+        const deleteSpy = vi.spyOn(cabs, 'delete');
+
+        const firstCab = await removeCab();
+
+        expect(firstCab.CabName).toBe(cab.CabName);
+        expect(firstCab.Status).toBe(cab.Status);
+        expect(firstCab.id).toBe(cab.id);
+        expect(deleteSpy).toHaveBeenCalledWith({
+            where: { id: 1 }
+        })
     })
 })
