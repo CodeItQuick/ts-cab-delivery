@@ -1,8 +1,9 @@
-import { testPrintLnObj } from "../src/printLn";
+import {testPrintLnObj} from "../src/printLn";
 import program from "../src/program";
 import {addCab, removeCab} from "../src/dispatchController";
-import {describe, test, expect, vi} from 'vitest';
+import {describe, expect, test, vi} from 'vitest';
 import prisma from '../src/__mocks__/client'
+
 vi.mock('../src/client')
 
 function messageReader(messages: string[]) {
@@ -21,9 +22,50 @@ describe("End to end tests", () => {
     })
     test("program can select option 1 then 0", async () => {
         const printLnFn = testPrintLnObj
-        await program(printLnFn, messageReader(["1", "0"]));
+        const cab = {
+            id: 1,
+            CabName: "Evan's Cab",
+            Status: "Available"
+        }
+        const cabs = prisma.cabs;
+        cabs.create.mockResolvedValue(cab);
+        const createSpy = vi.spyOn(cabs, 'create');
+
+        await program(printLnFn, messageReader(["0", "1"]));
 
         expect(printLnFn.messages).toContain("0. Exit");
+        expect(printLnFn.messages).toContain("New cab was added");
+        expect(createSpy).toHaveBeenCalledWith({ data: {
+                CabName: cab.CabName,
+                Status: cab.Status
+            }})
+    })
+    test("program can remove a cab", async () => {
+        const printLnFn = testPrintLnObj
+        const cab = {
+            id: 1,
+            CabName: "Evan's Cab",
+            Status: "Available"
+        }
+        const cabs = prisma.cabs;
+        cabs.create.mockResolvedValue(cab);
+        cabs.aggregate.mockResolvedValue({
+            _min: {
+                id: 1
+            },
+            _count: undefined, _avg: undefined, _sum: undefined, _max: undefined
+        });
+        cabs.delete.mockResolvedValue(cab);
+        const createSpy = vi.spyOn(cabs, 'create');
+
+        await program(printLnFn, messageReader(["0", "2", "1"]));
+
+        expect(printLnFn.messages).toContain("0. Exit");
+        expect(printLnFn.messages).toContain("New cab was added");
+        expect(createSpy).toHaveBeenCalledWith({ data: {
+                CabName: cab.CabName,
+                Status: cab.Status
+            }})
     })
     test("the addCab method creates a new cab in the database", async () => {
         const cab = {
@@ -38,14 +80,14 @@ describe("End to end tests", () => {
         const firstCab = await addCab();
 
         expect(firstCab.CabName).toBe(cab.CabName);
-        expect(firstCab.Status).toBe(cab.Status);
+        expect(firstCab.Status).toBe(cab.Status );
         expect(firstCab.id).toBe(cab.id);
         expect(createSpy).toHaveBeenCalledWith({ data: {
             CabName: cab.CabName,
             Status: cab.Status
         }})
     })
-    test("the removeCab method creates a new cab in the database", async () => {
+    test("the removeCab method removes an existing cab in the database", async () => {
         const cab = {
             id: 1,
             CabName: "Evan's Cab",
@@ -64,5 +106,22 @@ describe("End to end tests", () => {
         expect(deleteSpy).toHaveBeenCalledWith({
             where: { id: 1 }
         })
+    })
+    test("the removeCab method throws an error if no valid cabs found", async () => {
+        const cab = {
+            id: null,
+            CabName: null,
+            Status: null
+        }
+        const cabs = prisma.cabs;
+        cabs.aggregate.mockResolvedValue({ _min: cab, _count: undefined, _avg: undefined, _sum: undefined, _max: undefined })
+
+        await expect(removeCab()).rejects.toThrow("No available cabs");
+    })
+    test("the removeCab method throws an error if undefined cabs found", async () => {
+        const cabs = prisma.cabs;
+        cabs.aggregate.mockResolvedValue({ _min: undefined, _count: undefined, _avg: undefined, _sum: undefined, _max: undefined })
+
+        await expect(removeCab()).rejects.toThrow("No available cabs");
     })
 })

@@ -20,7 +20,7 @@ async function removeCab() {
             Status: 'Available'
         }
     });
-    if (minId?._min === null || minId?._min === undefined) {
+    if (!minId?._min || !minId?._min?.id ) {
         throw new Error("No available cabs");
     }
     const minIdNumber = minId._min.id ?? 0;

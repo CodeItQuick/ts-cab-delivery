@@ -1,5 +1,6 @@
 import inquirer from 'inquirer';
 import {TPrintLnObj} from "./printLn";
+import {addCab, removeCab} from "./dispatchController";
 
 async function getPrompt(): Promise<string | undefined> {
     const prompt: { name?: string } = await inquirer.prompt([{message: "Enter a selection: ", type: "input", name: "name"}]);
@@ -27,6 +28,16 @@ const program = async function Program(
         prompt = await promptFn();
 
         printLnObj.printLn(`You selected ${prompt}`);
+
+        if (prompt !== undefined && +prompt === 1) {
+            const addedCab = await addCab();
+            if (addedCab.Status === 'Available') {
+                printLnObj.printLn('New cab was added');
+            }
+        }
+        if (prompt !== undefined && +prompt === 2) {
+            await removeCab();
+        }
     }
 
 }
