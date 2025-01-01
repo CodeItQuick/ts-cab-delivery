@@ -12,3 +12,8 @@ model Cabs {
   CabName   String
   Status    String
 }
+model Customers {
+  id             Int     @id @default(autoincrement())
+  CustomerName   String
+  Status         String
+}

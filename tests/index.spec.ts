@@ -1,6 +1,6 @@
 import {testPrintLnObj} from "../src/printLn";
 import program from "../src/program";
-import {addCab, removeCab} from "../src/dispatchController";
+import {addCab, removeCab} from "../src/fleetController";
 import {describe, expect, test, vi} from 'vitest';
 import prisma from '../src/__mocks__/client'
 
@@ -62,10 +62,59 @@ describe("End to end tests", () => {
 
         expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("New cab was added");
+        expect(printLnFn.messages).toContain("Cab was removed");
         expect(createSpy).toHaveBeenCalledWith({ data: {
                 CabName: cab.CabName,
                 Status: cab.Status
             }})
+    })
+    test("program reports if no cab removed", async () => {
+        const printLnFn = testPrintLnObj
+        const cabs = prisma.cabs;
+        cabs.aggregate.mockResolvedValue({
+            _min: {
+                id: 0
+            },
+            _count: undefined, _avg: undefined, _sum: undefined, _max: undefined
+        });
+
+        await program(printLnFn, messageReader(["0", "2"]));
+
+        expect(printLnFn.messages).toContain("0. Exit");
+        expect(printLnFn.messages).toContain("No available cabs");
+    })
+    test("program can take a customer call", async () => {
+        const printLnFn = testPrintLnObj
+        const cab = {
+            id: 1,
+            CabName: "Evan's Cab",
+            Status: "Available"
+        }
+        const cabs = prisma.cabs;
+        cabs.create.mockResolvedValue(cab);
+        const createSpy = vi.spyOn(cabs, 'create');
+        const customerList = prisma.customers
+        let customer = {
+            id: 1,
+            CustomerName: "Dan",
+            Status: "InitialCustomerCall"
+        };
+        customerList.create.mockResolvedValue(customer);
+        const createCustomerSpy = vi.spyOn(customerList, 'create');
+
+        await program(printLnFn, messageReader(["0", "7", "1"]));
+
+        expect(printLnFn.messages).toContain("0. Exit");
+        expect(printLnFn.messages).toContain("New cab was added");
+        expect(printLnFn.messages).toContain("Customer called for a ride");
+        expect(createSpy).toHaveBeenCalledWith({ data: {
+                CabName: cab.CabName,
+                Status: cab.Status
+            }});
+        expect(createCustomerSpy).toHaveBeenCalledWith({ data: {
+                CustomerName: "Dan",
+                Status: "InitialCustomerCall"
+            }});
     })
     test("the addCab method creates a new cab in the database", async () => {
         const cab = {

@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import {TPrintLnObj} from "./printLn";
-import {addCab, removeCab} from "./dispatchController";
+import {addCab, removeCab} from "./fleetController";
+import {customerCall} from "./customerListController";
 
 async function getPrompt(): Promise<string | undefined> {
     const prompt: { name?: string } = await inquirer.prompt([{message: "Enter a selection: ", type: "input", name: "name"}]);
@@ -29,14 +30,28 @@ const program = async function Program(
 
         printLnObj.printLn(`You selected ${prompt}`);
 
-        if (prompt !== undefined && +prompt === 1) {
-            const addedCab = await addCab();
-            if (addedCab.Status === 'Available') {
-                printLnObj.printLn('New cab was added');
+        try {
+            if (prompt !== undefined && +prompt === 1) {
+                const addedCab = await addCab();
+                if (addedCab.Status === 'Available') {
+                    printLnObj.printLn('New cab was added');
+                }
+            }
+            if (prompt !== undefined && +prompt === 2) {
+                const removedCab = await removeCab();
+                if (removedCab.CabName.length) {
+                    printLnObj.printLn("Cab was removed");
+                }
+            }
+            if (prompt !== undefined && +prompt === 7) {
+                const customerRide = await customerCall();
+                if (!!customerRide) {
+                    printLnObj.printLn("Customer called for a ride");
+                }
             }
         }
-        if (prompt !== undefined && +prompt === 2) {
-            await removeCab();
+        catch (ex) {
+            printLnObj.printLn(ex.message);
         }
     }
 

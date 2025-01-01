@@ -8,7 +8,10 @@
     "dev": "tsc --watch -p .",
     "test:unit": "vitest -c ./vitest.config.unit.ts",
     "test:unit:ui": "vitest -c ./vitest.config.unit.ts --ui",
-    "start": "node src/program.ts"
+    "start": "node src/program.ts",
+    "migrate": "npx prisma migrate dev --name ",
+    "resolve": "npx prisma migrate resolve --applied ",
+    "generate": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
