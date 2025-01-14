@@ -30,14 +30,12 @@ async function cabRideRequest() {
         }
     })
 }
-async function customerAssignCab() {
+async function cabPickUpCustomer() {
     const firstAvailableCustomer = await prisma.customers.findFirst({
         where: {
             Status: "InitialCabCall"
         }
     });
-    const allCustomers = await prisma.customers.findMany();
-    console.log(allCustomers);
     if (!firstAvailableCustomer?.id) {
         throw new Error("No customers available to pickup")
     }
@@ -53,5 +51,26 @@ async function customerAssignCab() {
     })
 }
 
+async function cabDropOffCustomer() {
+    const firstAvailableCustomer = await prisma.customers.findFirst({
+        where: {
+            Status: "CustomerAssignCab"
+        }
+    });
+    if (!firstAvailableCustomer?.id) {
+        throw new Error("No customers available to drop off")
+    }
+    return prisma.customers.update({
+        where: {
+            id: firstAvailableCustomer?.id ?? 0
+        },
+        data: {
+            id: firstAvailableCustomer?.id ?? 0,
+            CustomerName: firstAvailableCustomer?.CustomerName ?? "",
+            Status: "CabDropOffCustomer",
+        }
+    })
+}
 
-export { customerCall, cabRideRequest, customerAssignCab };
+
+export { customerCall, cabRideRequest, cabPickUpCustomer, cabDropOffCustomer };
