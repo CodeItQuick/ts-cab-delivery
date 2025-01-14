@@ -1,6 +1,6 @@
-import { testPrintLnObj } from "../src/printLn";
+import {testPrintLnObj} from "../src/printLn";
 import program from "../src/program";
-import { beforeEach, describe, expect, test } from 'vitest';
+import {beforeEach, describe, expect, test} from 'vitest';
 import prisma from "../src/client";
 
 function messageReader(messages: string[]) {
@@ -16,10 +16,9 @@ describe("Integration tests", () => {
         await prisma.customers.deleteMany();
     })
     test("program contains exit command prompt", async () => {
-        const printLnFn = testPrintLnObj
-        await program(printLnFn, messageReader(["0"]));
+        await program(testPrintLnObj, messageReader(["0"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
+        expect(testPrintLnObj.messages).toContain("0. Exit");
     })
     test("program can select option 1 then 0", async () => {
         const printLnFn = testPrintLnObj
