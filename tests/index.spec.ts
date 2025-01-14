@@ -3,6 +3,7 @@ import program from "../src/program";
 import {addCab, removeCab} from "../src/fleetController";
 import {describe, expect, test, vi} from 'vitest';
 import prisma from '../src/__mocks__/client'
+import {cabRideRequest, customerCall} from "../src/customerListController";
 
 vi.mock('../src/client')
 
@@ -172,5 +173,34 @@ describe("End to end tests", () => {
         cabs.aggregate.mockResolvedValue({ _min: undefined, _count: undefined, _avg: undefined, _sum: undefined, _max: undefined })
 
         await expect(removeCab()).rejects.toThrow("No available cabs");
+    })
+    test("the removeCab method removes an existing cab in the database", async () => {
+        const cab = {
+            id: 1,
+            CabName: "Evan's Cab",
+            Status: "Available"
+        }
+        const customer = {
+            id: 1,
+            CustomerName: "Dan",
+            Status: "InitialCustomerCall"
+        }
+        const cabs = prisma.cabs;
+        cabs.create.mockResolvedValue(cab)
+        const addedCab = await addCab();
+        await customerCall();
+        const customers = prisma.customers;
+        customers.create.mockResolvedValue(customer)
+        customers.findFirst.mockResolvedValue(customer)
+        customers.update.mockResolvedValue({ ...customer, Status: "InitialCabCall" })
+
+        const cabRequested = await cabRideRequest();
+
+        expect(addedCab.CabName).toBe(cab.CabName);
+        expect(addedCab.Status).toBe(cab.Status);
+        expect(addedCab.id).toBe(cab.id);
+        expect(cabRequested.CustomerName).toBe(customer.CustomerName);
+        expect(cabRequested.Status).toBe("InitialCabCall");
+        expect(cabRequested.id).toBe(customer.id);
     })
 })

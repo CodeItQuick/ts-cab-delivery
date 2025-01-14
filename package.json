@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc -p .",
     "dev": "tsc --watch -p .",
-    "test:unit": "vitest -c ./vitest.config.unit.ts",
-    "test:unit:ui": "vitest -c ./vitest.config.unit.ts --ui",
+    "test:unit": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test -- vitest -c ./vitest.config.unit.ts",
+    "test:unit:ui": "npx prisma migrate deploy && vitest -c ./vitest.config.unit.ts --ui",
     "start": "node src/program.ts",
     "migrate": "npx prisma migrate dev --name ",
     "resolve": "npx prisma migrate resolve --applied ",
@@ -19,6 +19,8 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.1.0",
+    "dotenv": "^16.4.7",
+    "dotenv-cli": "^8.0.0",
     "inquirer": "^12.3.0"
   },
   "devDependencies": {

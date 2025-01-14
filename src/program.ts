@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 import {TPrintLnObj} from "./printLn";
 import {addCab, removeCab} from "./fleetController";
-import {customerCall} from "./customerListController";
+import {cabRideRequest, customerAssignCab, customerCall} from "./customerListController";
 
 async function getPrompt(): Promise<string | undefined> {
     const prompt: { name?: string } = await inquirer.prompt([{message: "Enter a selection: ", type: "input", name: "name"}]);
@@ -41,6 +41,18 @@ const program = async function Program(
                 const removedCab = await removeCab();
                 if (removedCab.CabName.length) {
                     printLnObj.printLn("Cab was removed");
+                }
+            }
+            if (prompt !== undefined && +prompt === 3) {
+                const assignCustomer = await cabRideRequest();
+                if (assignCustomer.CustomerName.length) {
+                    printLnObj.printLn("Dispatch requested a cab.");
+                }
+            }
+            if (prompt !== undefined && +prompt === 4) {
+                const assignCustomer = await customerAssignCab();
+                if (assignCustomer.CustomerName.length) {
+                    printLnObj.printLn("Cab can pickup customer.");
                 }
             }
             if (prompt !== undefined && +prompt === 7) {
