@@ -1,7 +1,13 @@
 import { beforeEach, describe, expect, test } from 'vitest';
 import prisma from "../src/client";
 import {addCab, removeCab} from "../src/fleetController";
-import {cabDropOffCustomer, cabPickUpCustomer, cabRideRequest, customerCall} from "../src/customerListController";
+import {
+    cabDropOffCustomer,
+    cabPickUpCustomer,
+    cabRideRequest,
+    customerCall,
+    customerCancelledRide
+} from "../src/customerListController";
 
 describe("Integration tests", () => {
     beforeEach(async () => {
@@ -43,12 +49,11 @@ describe("Integration tests", () => {
         const addedCab = await addCab();
         await customerCall();
 
-        const cabRequested = await cabRideRequest();
+        const customer = await cabRideRequest();
 
         expect(addedCab.CabName).toBe(cab.CabName);
         expect(addedCab.Status).toBe(cab.Status);
-        expect(cabRequested.CustomerName).toBe("Dan");
-        expect(cabRequested.Status).toBe("InitialCabCall");
+        expect(customer.Status).toBe("InitialCabCall");
     })
     test("dispatch can drop off a customer", async () => {
         const cab = {
@@ -60,12 +65,27 @@ describe("Integration tests", () => {
         await cabRideRequest();
         await cabPickUpCustomer();
 
-        const result = await cabDropOffCustomer();
+        const customer = await cabDropOffCustomer();
 
         expect(addedCab.CabName).toBe(cab.CabName);
         expect(addedCab.Status).toBe(cab.Status);
-        expect(result).toBeTruthy();
-        // expect(cabRequested.CustomerName).toBe("Dan");
-        // expect(cabRequested.Status).toBe("InitialCabCall");
+        expect(customer).toBeTruthy();
+        expect(customer.Status).toBe("CabDropOffCustomer");
+    })
+    test("dispatch can cancel a ride", async () => {
+        const cab = {
+            CabName: "Evan's Cab",
+            Status: "Available"
+        }
+        const addedCab = await addCab();
+        await customerCall();
+        await cabRideRequest();
+
+        const customer = await customerCancelledRide();
+
+        expect(addedCab.CabName).toBe(cab.CabName);
+        expect(addedCab.Status).toBe(cab.Status);
+        expect(customer).toBeTruthy();
+        expect(customer.Status).toBe("CustomerCancelledRide");
     })
 })

@@ -87,4 +87,14 @@ describe("Integration tests", () => {
         expect(printLnFn.messages).toContain("Cab can pickup customer.");
         expect(printLnFn.messages).toContain("Cab dropped off a customer.");
     })
+    test("program can cancel a cab", async () => {
+        const printLnFn = testPrintLnObj
+
+        await program(printLnFn, messageReader(["0", "6", "1"]));
+
+        expect(printLnFn.messages).toContain("0. Exit");
+        expect(printLnFn.messages).toContain("New cab was added");
+        expect(printLnFn.messages).toContain("Customer called for a ride");
+        expect(printLnFn.messages).toContain("Customer cancelled a ride.");
+    })
 })

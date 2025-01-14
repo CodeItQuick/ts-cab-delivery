@@ -61,6 +61,9 @@ const program = async function Program(
                     printLnObj.printLn("Cab dropped off a customer.");
                 }
             }
+            if (prompt !== undefined && +prompt === 6) {
+                printLnObj.printLn("Customer cancelled a ride.");
+            }
             if (prompt !== undefined && +prompt === 7) {
                 const customerRide = await customerCall();
                 if (!!customerRide) {
