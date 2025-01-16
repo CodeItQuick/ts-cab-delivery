@@ -10,7 +10,7 @@ function messageReader(messages: string[]) {
             res(storedMessages.pop()));
 }
 
-describe("Integration tests", () => {
+describe("End-to-end tests", () => {
     beforeEach(async () => {
         await prisma.cabs.deleteMany();
         await prisma.customers.deleteMany();

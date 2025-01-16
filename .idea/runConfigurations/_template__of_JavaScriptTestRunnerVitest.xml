@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="true" type="JavaScriptTestRunnerVitest">
+    <node-interpreter value="project" />
+    <node-options value="--env-file=.env.test" />
+    <envs>
+      <env name="DATABASE_url" value="&quot;.env.test&quot;" />
+    </envs>
+    <scope-kind value="ALL" />
+    <method v="2" />
+  </configuration>
+</component>
