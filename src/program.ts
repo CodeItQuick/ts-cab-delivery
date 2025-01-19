@@ -4,7 +4,8 @@ import {addCab, removeCab} from "./fleetController";
 import {cabRideRequest, cabPickUpCustomer, customerCall, cabDropOffCustomer} from "./customerListController";
 
 async function getPrompt(): Promise<string | undefined> {
-    const prompt: { name?: string } = await inquirer.prompt([{message: "Enter a selection: ", type: "input", name: "name"}]);
+    const prompt: { name?: string } = await
+        inquirer.prompt([{message: "Enter a selection: ", type: "input", name: "name"}]);
     return prompt?.name;
 }
 
@@ -71,7 +72,7 @@ const program = async function Program(
                 }
             }
         }
-        catch (ex) {
+        catch (ex: any) {
             printLnObj.printLn(ex.message);
         }
     }
@@ -79,3 +80,4 @@ const program = async function Program(
 }
 
 export default program;
+export { getPrompt };
