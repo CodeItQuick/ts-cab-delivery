@@ -2,12 +2,13 @@
   "name": "ts-cab-delivery",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "tsc -p .",
     "dev": "tsc --watch -p .",
-    "test:unit": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test -- vitest -c ./vitest.config.unit.ts",
-    "test:unit:ui": "npx prisma migrate deploy && vitest -c ./vitest.config.unit.ts --ui",
-    "start": "tsc && tsc src/index",
+    "test:unit": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test -- vitest -c jest.config.unit.ts",
+    "test:unit:ui": "npx prisma migrate deploy && vitest -c jest.config.unit.ts --ui",
+    "start": "tsx --env-file=.env.test src/index.ts",
     "migrate": "npx prisma migrate dev --name ",
     "resolve": "npx prisma migrate resolve --applied ",
     "generate": "npx prisma generate"
@@ -25,14 +26,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@jest/globals": "^29.7.0",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "^22.10.2",
     "eslint": "^9.18.0",
+    "jest": "~29.7.0",
+    "jest-mock-extended": "^4.0.0-beta1",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.20.0",
-    "vitest": "^2.1.8",
-    "vitest-mock-extended": "^2.0.2"
+    "typescript-eslint": "^8.20.0"
   }
 }

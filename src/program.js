@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getPrompt = getPrompt;
 var inquirer_1 = require("inquirer");
 var fleetController_1 = require("./fleetController");
 var customerListController_1 = require("./customerListController");

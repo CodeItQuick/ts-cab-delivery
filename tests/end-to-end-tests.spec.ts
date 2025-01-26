@@ -1,7 +1,8 @@
 import {testPrintLnObj} from "../src/printLn";
 import program from "../src/program";
-import {beforeEach, describe, expect, test} from 'vitest';
+
 import prisma from "../src/client";
+import {beforeEach, describe, expect, test} from "@jest/globals";
 
 function messageReader(messages: string[]) {
     let storedMessages = messages;

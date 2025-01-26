@@ -1,7 +1,7 @@
-import { beforeEach, describe, expect, test } from 'vitest';
 import prisma from "../src/client";
 import { addCab, removeCab } from "../src/fleetController";
 import { cabDropOffCustomer, cabPickUpCustomer, cabRideRequest, customerCall, customerCancelledRide } from "../src/customerListController";
+import { beforeEach, describe, expect, test } from "@jest/globals";
 describe("Integration tests", () => {
     beforeEach(async () => {
         await prisma.cabs.deleteMany();

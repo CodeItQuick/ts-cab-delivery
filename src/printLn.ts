@@ -18,5 +18,6 @@ const testPrintLnObj: TPrintLnObj = {
     messages: []
 }
 
-export { TPrintLnObj, testPrintLnObj };
+export { testPrintLnObj };
+export type { TPrintLnObj };
 export default printLnObj;

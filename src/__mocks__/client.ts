@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-import { beforeEach } from 'vitest'
-import { mockDeep, mockReset } from 'vitest-mock-extended'
+import { beforeEach } from '@jest/globals'
+import { mockDeep, mockReset } from 'jest-mock-extended'
 beforeEach(() => {
     mockReset(prisma)
 })

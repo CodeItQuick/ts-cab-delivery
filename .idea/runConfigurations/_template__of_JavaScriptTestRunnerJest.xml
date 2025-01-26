@@ -1,14 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Start Program" type="js.build_tools.npm">
-    <package-json value="$PROJECT_DIR$/package.json" />
-    <command value="run" />
-    <scripts>
-      <script value="start" />
-    </scripts>
+  <configuration default="true" type="JavaScriptTestRunnerJest">
     <node-interpreter value="project" />
+    <jest-package value="$PROJECT_DIR$/node_modules/jest" />
     <envs>
-      <env name="DATABASE_URL" value="file:./dev.db" />
+      <env name="DATABASE_URL" value="file:./test.db" />
     </envs>
+    <scope-kind value="DIRECTORY" />
+    <test-directory value="$PROJECT_DIR$/tests" />
     <method v="2">
       <option name="TypeScript.Before.Run" enabled="true" FAIL_ON_ERROR="true" CONFIG_PATH="$PROJECT_DIR$/tsconfig.json" />
     </method>

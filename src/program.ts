@@ -76,7 +76,6 @@ const program = async function Program(
             printLnObj.printLn(ex.message);
         }
     }
-
 }
 
 export default program;
