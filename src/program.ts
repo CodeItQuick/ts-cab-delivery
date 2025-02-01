@@ -62,7 +62,7 @@ const program = async function Program(
             if (prompt !== undefined && +prompt === 6) {
                 const assignCustomer = await cabPickUpCustomer();
                 if (assignCustomer.CustomerName.length) {
-                    printLnObj.printLn("Cab can pickup customer.");
+                    printLnObj.printLn("Dispatch recorded cab has picked up customer.");
                 }
             }
             if (prompt !== undefined && +prompt === 7) {
