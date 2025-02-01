@@ -62,6 +62,29 @@ describe("Integration tests", () => {
     test("dispatch can request a cab through cabRideRequest and it fails when no cabs available", async () => {
         await expect(cabRideRequest()).rejects.toThrowError("No available cabs");
     })
+    test("dispatch can pick up a customer", async () => {
+        const cab = {
+            CabName: "Evan's Cab",
+            Status: "Available"
+        }
+        const addedCab = await addCab();
+        await customerCall();
+        await cabRideRequest();
+
+        const customer = await cabPickUpCustomer();
+
+        expect(addedCab.CabName).toBe(cab.CabName);
+        expect(addedCab.Status).toBe(cab.Status);
+        expect(customer).toBeTruthy();
+        expect(customer.Status).toBe("CustomerAssignCab");
+    })
+    test("dispatch can request a cab through cabRideRequest and it fails when no customers have called in", async () => {
+        await addCab();
+        await expect(cabPickUpCustomer()).rejects.toThrowError("No customers available to pickup");
+    })
+    test("dispatch can request a cab through cabRideRequest and it fails when no cabs available", async () => {
+        await expect(cabPickUpCustomer()).rejects.toThrowError("No available cabs");
+    })
     test("dispatch can drop off a customer", async () => {
         const cab = {
             CabName: "Evan's Cab",
