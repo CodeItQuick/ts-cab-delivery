@@ -14,7 +14,7 @@ describe("Integration tests: Dispatch ", () => {
         await prisma.cabs.deleteMany();
         await prisma.customers.deleteMany();
     })
-    test("requests cab to pickup customer", async () => {
+    test("records cab assigned to pickup customer", async () => {
         const cab = {
             CabName: "Evan's Cab",
             Status: "Available"
@@ -28,14 +28,14 @@ describe("Integration tests: Dispatch ", () => {
         expect(await prisma.cabs.findFirst({ where: { Status: "CustomerRideRequested" }})).toBeTruthy();
         expect(customer.Status).toBe("InitialCabCall");
     })
-    test("attempts to request cab to pickup customer and it fails when no customers have called in", async () => {
+    test("records cab assigned to pickup customer and it fails when no customers have called in", async () => {
         await addCab();
         await expect(cabRideRequest()).rejects.toThrowError("No customers have called in");
     })
-    test("attempts to request cab to pickup customer and it fails when no cabs available", async () => {
+    test("records cab assigned to pickup customer and it fails when no cabs available", async () => {
         await expect(cabRideRequest()).rejects.toThrowError("No available cabs");
     })
-    test("asks can pick up a customer", async () => {
+    test("records cab picked up a customer", async () => {
         const cab = {
             CabName: "Evan's Cab",
             Status: "Available"
@@ -51,10 +51,10 @@ describe("Integration tests: Dispatch ", () => {
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CustomerAssignCab");
     })
-    test("attempts to ask cab to pick up a customer and it fails when no cab assigned to pickup customer", async () => {
+    test("attempts to record cab picked up a customer and it fails when no cab was assigned to pickup customer", async () => {
         await expect(cabPickUpCustomer()).rejects.toThrowError("No assigned cab to pickup customer");
     })
-    test("dispatch can drop off a customer", async () => {
+    test("records cab dropped off a customer", async () => {
         const cab = {
             CabName: "Evan's Cab",
             Status: "Available"
@@ -71,9 +71,8 @@ describe("Integration tests: Dispatch ", () => {
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CabDropOffCustomer");
     })
-    test("dispatch can request a cab through cabDropOffCustomer and it fails when no cabs available", async () => {
-        await addCab();
-        await expect(cabDropOffCustomer()).rejects.toThrowError("No available cabs");
+    test("attempts to record cab dropped off customer and it fails when no cab properly assigned", async () => {
+        await expect(cabDropOffCustomer()).rejects.toThrowError("No cab properly assigned");
     })
     test("dispatch can cancel a ride", async () => {
         const cab = {
