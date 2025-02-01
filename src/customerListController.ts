@@ -80,7 +80,7 @@ async function cabPickUpCustomer() {
             CustomerName: firstAvailableCustomer?.CustomerName ?? "",
             Status: "CustomerAssignCab",
         }
-    })
+    });
 }
 
 async function cabDropOffCustomer() {

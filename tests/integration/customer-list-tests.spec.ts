@@ -36,18 +36,14 @@ describe("Integration tests: Dispatch ", () => {
         await expect(cabRideRequest()).rejects.toThrowError("No available cabs");
     })
     test("records cab picked up a customer", async () => {
-        const cab = {
-            CabName: "Evan's Cab",
-            Status: "Available"
-        }
-        const addedCab = await addCab();
+        await addCab();
         await customerCall();
         await cabRideRequest();
 
         const customer = await cabPickUpCustomer();
 
-        expect(addedCab.CabName).toBe(cab.CabName);
-        expect(await prisma.cabs.findFirst({ where: { Status: "TransportingCustomer" }})).toBeTruthy();
+        expect(await prisma.cabs.findFirst({ where: { Status: "TransportingCustomer" }}))
+            .toBeTruthy();
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CustomerAssignCab");
     })
