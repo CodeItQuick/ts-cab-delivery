@@ -1,7 +1,7 @@
-import {testPrintLnObj} from "../src/printLn";
-import program from "../src/program";
+import {testPrintLnObj} from "../../src/printLn";
+import program from "../../src/program";
 
-import prisma from "../src/client";
+import prisma from "../../src/client";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 
 function messageReader(messages: string[]) {
