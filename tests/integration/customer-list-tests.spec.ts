@@ -71,10 +71,10 @@ describe("Integration tests: Dispatch ", () => {
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CabDropOffCustomer");
     })
-    test("attempts to record cab dropped off customer and it fails when no cab properly assigned", async () => {
-        await expect(cabDropOffCustomer()).rejects.toThrowError("No cab properly assigned");
+    test("attempts to record cab dropped off customer and it fails when no cab transporting a customer", async () => {
+        await expect(cabDropOffCustomer()).rejects.toThrowError("No cab transporting a customer");
     })
-    test("records customer ride cancelled", async () => {
+    test("records customer ride request cancelled", async () => {
         const cab = {
             CabName: "Evan's Cab",
             Status: "Available"

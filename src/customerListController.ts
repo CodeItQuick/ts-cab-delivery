@@ -90,7 +90,7 @@ async function cabDropOffCustomer() {
         }
     });
     if (!availableCab?.id) {
-        throw new Error("No cab properly assigned");
+        throw new Error("No cab transporting a customer");
     }
     const firstAvailableCustomer = await prisma.customers.findFirst({
         where: {
