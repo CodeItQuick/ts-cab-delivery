@@ -68,6 +68,14 @@ async function cabPickUpCustomer() {
 }
 
 async function cabDropOffCustomer() {
+    const availableCab = await prisma.cabs.findFirst({
+        where: {
+            Status: "Available"
+        }
+    });
+    if (!availableCab?.id) {
+        throw new Error("No available cabs");
+    }
     const firstAvailableCustomer = await prisma.customers.findFirst({
         where: {
             Status: "CustomerAssignCab"
