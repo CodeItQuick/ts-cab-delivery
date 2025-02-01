@@ -16,17 +16,11 @@ describe("End-to-end tests", () => {
         await prisma.cabs.deleteMany();
         await prisma.customers.deleteMany();
     })
-    test("program contains exit command prompt", async () => {
-        await program(testPrintLnObj, messageReader(["0"]));
-
-        expect(testPrintLnObj.messages).toContain("0. Exit");
-    })
     test("program can select option 1 then 0", async () => {
         const printLnFn = testPrintLnObj
 
         await program(printLnFn, messageReader(["0", "1"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("New cab was added");
     })
     test("program can remove a cab", async () => {
@@ -34,7 +28,6 @@ describe("End-to-end tests", () => {
 
         await program(printLnFn, messageReader(["0", "2", "1"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("New cab was added");
         expect(printLnFn.messages).toContain("Cab was removed");
     })
@@ -43,7 +36,6 @@ describe("End-to-end tests", () => {
 
         await program(printLnFn, messageReader(["0", "2"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("No available cabs");
     })
     test("program can take a customer call", async () => {
@@ -51,7 +43,6 @@ describe("End-to-end tests", () => {
 
         await program(printLnFn, messageReader(["0", "7", "1"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("New cab was added");
         expect(printLnFn.messages).toContain("Customer called for a ride");
     })
@@ -60,17 +51,15 @@ describe("End-to-end tests", () => {
 
         await program(printLnFn, messageReader(["0", "3", "7", "1"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("New cab was added");
         expect(printLnFn.messages).toContain("Customer called for a ride");
         expect(printLnFn.messages).toContain("Dispatch requested a cab.");
     })
-    test("program can assign a cab", async () => {
+    test("program can pickup a customer", async () => {
         const printLnFn = testPrintLnObj
 
         await program(printLnFn, messageReader(["0", "4", "3", "7", "1"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("New cab was added");
         expect(printLnFn.messages).toContain("Customer called for a ride");
         expect(printLnFn.messages).toContain("Dispatch requested a cab.");
@@ -81,7 +70,6 @@ describe("End-to-end tests", () => {
 
         await program(printLnFn, messageReader(["0", "5", "4", "3", "7", "1"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("New cab was added");
         expect(printLnFn.messages).toContain("Customer called for a ride");
         expect(printLnFn.messages).toContain("Dispatch requested a cab.");
@@ -93,7 +81,6 @@ describe("End-to-end tests", () => {
 
         await program(printLnFn, messageReader(["0", "6", "1"]));
 
-        expect(printLnFn.messages).toContain("0. Exit");
         expect(printLnFn.messages).toContain("New cab was added");
         expect(printLnFn.messages).toContain("Customer called for a ride");
         expect(printLnFn.messages).toContain("Customer cancelled a ride.");

@@ -11,13 +11,21 @@ async function customerCall() {
     });
 }
 async function cabRideRequest() {
+    const availableCab = await prisma.cabs.findFirst({
+        where: {
+            Status: "Available"
+        }
+    });
+    if (!availableCab?.id) {
+        throw new Error("No available cabs");
+    }
     const firstAvailableCustomer = await prisma.customers.findFirst({
         where: {
             Status: "InitialCustomerCall"
         }
     });
     if (!firstAvailableCustomer?.id) {
-        throw new Error("No customers have called in")
+        throw new Error("No customers have called in");
     }
     return prisma.customers.update({
         where: {

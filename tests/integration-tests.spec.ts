@@ -55,6 +55,13 @@ describe("Integration tests", () => {
         expect(addedCab.Status).toBe(cab.Status);
         expect(customer.Status).toBe("InitialCabCall");
     })
+    test("dispatch can request a cab through cabRideRequest and it fails when no customers have called in", async () => {
+        await addCab();
+        await expect(cabRideRequest()).rejects.toThrowError("No customers have called in");
+    })
+    test("dispatch can request a cab through cabRideRequest and it fails when no cabs available", async () => {
+        await expect(cabRideRequest()).rejects.toThrowError("No available cabs");
+    })
     test("dispatch can drop off a customer", async () => {
         const cab = {
             CabName: "Evan's Cab",

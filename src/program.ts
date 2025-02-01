@@ -25,7 +25,7 @@ const program = async function Program(
     let prompt = undefined;
 
     while (prompt !== '0') {
-        menuOptions.forEach(x => printLnObj.printLn(x));
+        menuOptions.forEach(x => console.log(x)); // Note: do not print menu to debug output
 
         prompt = await promptFn();
 

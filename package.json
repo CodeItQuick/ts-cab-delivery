@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc -p .",
     "dev": "tsc --watch -p .",
-    "test:unit": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test -- vitest -c jest.config.unit.ts",
-    "test:unit:ui": "npx prisma migrate deploy && vitest -c jest.config.unit.ts --ui",
+    "test:unit": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test -- jest -c jest.config.ts",
+    "test:unit:ui": "npx prisma migrate deploy && jest -c jest.config.ts --ui",
     "start": "tsx --env-file=.env.test src/index.ts",
     "migrate": "npx prisma migrate dev --name ",
     "resolve": "npx prisma migrate resolve --applied ",
