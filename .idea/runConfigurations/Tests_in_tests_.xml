@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tests in tests/" type="JavaScriptTestRunnerJest" nameIsGenerated="true">
+    <node-interpreter value="project" />
+    <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+    <working-dir value="$PROJECT_DIR$" />
+    <jest-options value="--runInBand" />
+    <envs>
+      <env name="DATABASE_URL" value="file:./test.db" />
+    </envs>
+    <scope-kind value="DIRECTORY" />
+    <test-directory value="$PROJECT_DIR$/tests" />
+    <method v="2">
+      <option name="TypeScript.Before.Run" enabled="true" FAIL_ON_ERROR="true" CONFIG_PATH="$PROJECT_DIR$/tsconfig.json" />
+    </method>
+  </configuration>
+</component>
