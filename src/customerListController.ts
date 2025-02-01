@@ -69,7 +69,7 @@ async function cabPickUpCustomer() {
             id: availableCab?.id ?? 0,
             Status: "TransportingCustomer",
         }
-    })
+    });
     return prisma.customers.update({
         where: {
             id: firstAvailableCustomer?.id ?? 0
@@ -99,6 +99,15 @@ async function cabDropOffCustomer() {
     if (!firstAvailableCustomer?.id) {
         throw new Error("No customers available to drop off")
     }
+    await prisma.cabs.update({
+        where: {
+            id: availableCab?.id ?? 0
+        },
+        data: {
+            id: availableCab?.id ?? 0,
+            Status: "Available",
+        }
+    });
     return prisma.customers.update({
         where: {
             id: firstAvailableCustomer?.id ?? 0

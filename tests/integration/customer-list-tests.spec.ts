@@ -67,7 +67,7 @@ describe("Integration tests", () => {
         const customer = await cabDropOffCustomer();
 
         expect(addedCab.CabName).toBe(cab.CabName);
-        expect(addedCab.Status).toBe(cab.Status);
+        expect(await prisma.cabs.findFirst({ where: { Status: "Available" }})).toBeTruthy();
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CabDropOffCustomer");
     })
