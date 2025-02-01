@@ -125,7 +125,7 @@ describe("Integration tests", () => {
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CustomerCancelledRide");
     })
-    test("dispatch can request a cab through cabDropOffCustomer and it fails when no customers have called in", async () => {
+    test("dispatch can request a cab through customerCancelledRide and it fails when no customers have called in", async () => {
         await addCab();
         await expect(customerCancelledRide()).rejects.toThrowError("No customers have called in");
     })
