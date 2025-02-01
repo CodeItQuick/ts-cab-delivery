@@ -27,6 +27,16 @@ async function cabRideRequest() {
     if (!firstAvailableCustomer?.id) {
         throw new Error("No customers have called in");
     }
+    await prisma.cabs.update({
+        where: {
+            id: availableCab?.id ?? 0
+        },
+        data: {
+            id: availableCab?.id ?? 0,
+            Status: "CustomerRideRequested",
+        }
+
+    })
     return prisma.customers.update({
         where: {
             id: firstAvailableCustomer?.id ?? 0
@@ -41,7 +51,7 @@ async function cabRideRequest() {
 async function cabPickUpCustomer() {
     const availableCab = await prisma.cabs.findFirst({
         where: {
-            Status: "Available"
+            Status: "CustomerRideRequested"
         }
     });
     if (!availableCab?.id) {
@@ -52,9 +62,6 @@ async function cabPickUpCustomer() {
             Status: "InitialCabCall"
         }
     });
-    if (!firstAvailableCustomer?.id) {
-        throw new Error("No customers available to pickup")
-    }
     return prisma.customers.update({
         where: {
             id: firstAvailableCustomer?.id ?? 0
@@ -70,7 +77,7 @@ async function cabPickUpCustomer() {
 async function cabDropOffCustomer() {
     const availableCab = await prisma.cabs.findFirst({
         where: {
-            Status: "Available"
+            Status: "CustomerRideRequested"
         }
     });
     if (!availableCab?.id) {

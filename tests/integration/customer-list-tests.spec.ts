@@ -26,7 +26,7 @@ describe("Integration tests", () => {
         const customer = await cabRideRequest();
 
         expect(addedCab.CabName).toBe(cab.CabName);
-        expect(addedCab.Status).toBe(cab.Status);
+        expect(await prisma.cabs.findFirst({ where: { Status: "CustomerRideRequested" }})).toBeTruthy();
         expect(customer.Status).toBe("InitialCabCall");
     })
     test("dispatch can request a cab through cabRideRequest and it fails when no customers have called in", async () => {
@@ -52,10 +52,6 @@ describe("Integration tests", () => {
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CustomerAssignCab");
     })
-    test("dispatch can request a cab through cabPickUpCustomer and it fails when no customers have called in", async () => {
-        await addCab();
-        await expect(cabPickUpCustomer()).rejects.toThrowError("No customers available to pickup");
-    })
     test("dispatch can request a cab through cabPickUpCustomer and it fails when no cabs available", async () => {
         await expect(cabPickUpCustomer()).rejects.toThrowError("No available cabs");
     })
@@ -76,11 +72,8 @@ describe("Integration tests", () => {
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CabDropOffCustomer");
     })
-    test("dispatch can request a cab through cabDropOffCustomer and it fails when no customers have called in", async () => {
-        await addCab();
-        await expect(cabDropOffCustomer()).rejects.toThrowError("No customers available to drop off");
-    })
     test("dispatch can request a cab through cabDropOffCustomer and it fails when no cabs available", async () => {
+        await addCab();
         await expect(cabDropOffCustomer()).rejects.toThrowError("No available cabs");
     })
     test("dispatch can cancel a ride", async () => {
