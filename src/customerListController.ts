@@ -54,8 +54,9 @@ async function cabPickUpCustomer() {
         }
     });
     if (!availableCab?.id) {
-        throw new Error("No available cabs");
+        throw new Error("No assigned cab to pickup customer");
     }
+
     const firstAvailableCustomer = await prisma.customers.findFirst({
         where: {
             Status: "InitialCabCall"

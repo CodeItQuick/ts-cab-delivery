@@ -9,12 +9,12 @@ import {
 } from "../../src/customerListController";
 import {beforeEach, describe, expect, test} from "@jest/globals";
 
-describe("Integration tests", () => {
+describe("Integration tests: Dispatch ", () => {
     beforeEach(async () => {
         await prisma.cabs.deleteMany();
         await prisma.customers.deleteMany();
     })
-    test("dispatch can request a cab through cabRideRequest", async () => {
+    test("requests cab to pickup customer", async () => {
         const cab = {
             CabName: "Evan's Cab",
             Status: "Available"
@@ -28,14 +28,14 @@ describe("Integration tests", () => {
         expect(await prisma.cabs.findFirst({ where: { Status: "CustomerRideRequested" }})).toBeTruthy();
         expect(customer.Status).toBe("InitialCabCall");
     })
-    test("dispatch can request a cab through cabRideRequest and it fails when no customers have called in", async () => {
+    test("attempts to request cab to pickup customer and it fails when no customers have called in", async () => {
         await addCab();
         await expect(cabRideRequest()).rejects.toThrowError("No customers have called in");
     })
-    test("dispatch can request a cab through cabRideRequest and it fails when no cabs available", async () => {
+    test("attempts to request cab to pickup customer and it fails when no cabs available", async () => {
         await expect(cabRideRequest()).rejects.toThrowError("No available cabs");
     })
-    test("dispatch can pick up a customer", async () => {
+    test("asks can pick up a customer", async () => {
         const cab = {
             CabName: "Evan's Cab",
             Status: "Available"
@@ -51,8 +51,8 @@ describe("Integration tests", () => {
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CustomerAssignCab");
     })
-    test("dispatch can request a cab through cabPickUpCustomer and it fails when no cabs available", async () => {
-        await expect(cabPickUpCustomer()).rejects.toThrowError("No available cabs");
+    test("attempts to ask cab to pick up a customer and it fails when no cab assigned to pickup customer", async () => {
+        await expect(cabPickUpCustomer()).rejects.toThrowError("No assigned cab to pickup customer");
     })
     test("dispatch can drop off a customer", async () => {
         const cab = {
