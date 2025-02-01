@@ -8,10 +8,7 @@ function messageReader(messages: string[]) {
     let storedMessages = messages;
     return () => {
         return new Promise<string | undefined>(
-            (res, rej) => {
-                const removedItem = storedMessages.shift();
-                return res(removedItem);
-            });
+            (res) => res(storedMessages.shift()));
     };
 }
 
