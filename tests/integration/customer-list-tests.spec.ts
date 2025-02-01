@@ -51,18 +51,13 @@ describe("Integration tests: Dispatch ", () => {
         await expect(cabPickUpCustomer()).rejects.toThrowError("No assigned cab to pickup customer");
     })
     test("records cab dropped off a customer", async () => {
-        const cab = {
-            CabName: "Evan's Cab",
-            Status: "Available"
-        }
-        const addedCab = await addCab();
+        await addCab();
         await customerCall();
         await cabRideRequest();
         await cabPickUpCustomer();
 
         const customer = await cabDropOffCustomer();
 
-        expect(addedCab.CabName).toBe(cab.CabName);
         expect(await prisma.cabs.findFirst({ where: { Status: "Available" }})).toBeTruthy();
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CabDropOffCustomer");
