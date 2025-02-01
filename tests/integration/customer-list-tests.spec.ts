@@ -14,7 +14,6 @@ describe("Integration tests", () => {
         await prisma.cabs.deleteMany();
         await prisma.customers.deleteMany();
     })
-
     test("dispatch can request a cab through cabRideRequest", async () => {
         const cab = {
             CabName: "Evan's Cab",
@@ -48,7 +47,7 @@ describe("Integration tests", () => {
         const customer = await cabPickUpCustomer();
 
         expect(addedCab.CabName).toBe(cab.CabName);
-        expect(await prisma.cabs.findFirst({ where: { Status: "CabEnroute" }})).toBeTruthy();
+        expect(await prisma.cabs.findFirst({ where: { Status: "TransportingCustomer" }})).toBeTruthy();
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CustomerAssignCab");
     })
