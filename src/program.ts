@@ -15,11 +15,11 @@ const program = async function Program(
         "0. Exit",
         "1. (Incoming Radio) Add New Cab Driver",
         "2. (Incoming Radio) Remove Cab Driver",
-        "3. (Outgoing Radio) Send Cab Driver Ride Request",
-        "4. (Incoming Radio) Cab Notifies Passenger Picked Up",
-        "5. (Incoming Radio) Cab Notifies Passenger Dropped Off",
-        "6. (Incoming Call) Cancel Cab Driver Fare",
-        "7. (Incoming Call) Customer Request Ride"
+        "3. (Incoming Call) Customer Request Ride",
+        "4. (Incoming Call) Cancel Cab Driver Fare",
+        "5. (Outgoing Radio) Send Cab Driver Ride Request",
+        "6. (Incoming Radio) Cab Notifies Passenger Picked Up",
+        "7. (Incoming Radio) Cab Notifies Passenger Dropped Off",
     ];
 
     let prompt = undefined;
@@ -45,30 +45,30 @@ const program = async function Program(
                 }
             }
             if (prompt !== undefined && +prompt === 3) {
+                const customerRide = await customerCall();
+                if (!!customerRide) {
+                    printLnObj.printLn("Customer called for a ride");
+                }
+            }
+            if (prompt !== undefined && +prompt === 4) {
+                printLnObj.printLn("Customer cancelled a ride.");
+            }
+            if (prompt !== undefined && +prompt === 5) {
                 const assignCustomer = await cabRideRequest();
                 if (assignCustomer.CustomerName.length) {
                     printLnObj.printLn("Dispatch requested a cab.");
                 }
             }
-            if (prompt !== undefined && +prompt === 4) {
+            if (prompt !== undefined && +prompt === 6) {
                 const assignCustomer = await cabPickUpCustomer();
                 if (assignCustomer.CustomerName.length) {
                     printLnObj.printLn("Cab can pickup customer.");
                 }
             }
-            if (prompt !== undefined && +prompt === 5) {
+            if (prompt !== undefined && +prompt === 7) {
                 const customerRide = await cabDropOffCustomer();
                 if (!!customerRide) {
                     printLnObj.printLn("Cab dropped off a customer.");
-                }
-            }
-            if (prompt !== undefined && +prompt === 6) {
-                printLnObj.printLn("Customer cancelled a ride.");
-            }
-            if (prompt !== undefined && +prompt === 7) {
-                const customerRide = await customerCall();
-                if (!!customerRide) {
-                    printLnObj.printLn("Customer called for a ride");
                 }
             }
         }

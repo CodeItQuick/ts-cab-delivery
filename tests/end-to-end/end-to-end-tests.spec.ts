@@ -41,7 +41,7 @@ describe("End-to-end tests", () => {
     test("program can take a customer call", async () => {
         const printLnFn = testPrintLnObj
 
-        await program(printLnFn, messageReader(["0", "7", "1"]));
+        await program(printLnFn, messageReader(["0", "3", "1"]));
 
         expect(printLnFn.messages).toContain("New cab was added");
         expect(printLnFn.messages).toContain("Customer called for a ride");
@@ -49,7 +49,7 @@ describe("End-to-end tests", () => {
     test("program can assign a cab", async () => {
         const printLnFn = testPrintLnObj
 
-        await program(printLnFn, messageReader(["0", "3", "7", "1"]));
+        await program(printLnFn, messageReader(["0", "5", "3", "1"]));
 
         expect(printLnFn.messages).toContain("New cab was added");
         expect(printLnFn.messages).toContain("Customer called for a ride");
