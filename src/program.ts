@@ -35,19 +35,19 @@ const program = async function Program(
             if (prompt !== undefined && +prompt === 1) {
                 const addedCab = await addCab();
                 if (addedCab.Status === 'Available') {
-                    printLnObj.printLn('New cab was added');
+                    printLnObj.printLn('Dispatch recorded cab was added.');
                 }
             }
             if (prompt !== undefined && +prompt === 2) {
                 const removedCab = await removeCab();
                 if (removedCab.CabName.length) {
-                    printLnObj.printLn("Cab was removed");
+                    printLnObj.printLn("Dispatch recorded cab was removed.");
                 }
             }
             if (prompt !== undefined && +prompt === 3) {
                 const customerRide = await customerCall();
                 if (!!customerRide) {
-                    printLnObj.printLn("Customer called for a ride");
+                    printLnObj.printLn("Dispatch received customer call for a ride.");
                 }
             }
             if (prompt !== undefined && +prompt === 4) {
@@ -56,7 +56,7 @@ const program = async function Program(
             if (prompt !== undefined && +prompt === 5) {
                 const assignCustomer = await cabRideRequest();
                 if (assignCustomer.CustomerName.length) {
-                    printLnObj.printLn("Dispatch requested a cab.");
+                    printLnObj.printLn("Dispatch recorded cab requested.");
                 }
             }
             if (prompt !== undefined && +prompt === 6) {
@@ -68,7 +68,7 @@ const program = async function Program(
             if (prompt !== undefined && +prompt === 7) {
                 const customerRide = await cabDropOffCustomer();
                 if (!!customerRide) {
-                    printLnObj.printLn("Cab dropped off a customer.");
+                    printLnObj.printLn("Dispatch recorded customer is dropped off.");
                 }
             }
         }
