@@ -102,7 +102,7 @@ async function customerCancelledRide() {
         }
     });
     if (!firstAvailableCustomer?.id) {
-        throw new Error("No customers available to drop off")
+        throw new Error("No customers have called in")
     }
     return prisma.customers.update({
         where: {
