@@ -18,9 +18,14 @@ function cabsRepository() {
         });
         if (status === 'TransportingCustomer') {
             const collectedFare = 5;
+            const customer = await prisma.customers
+                .findFirst({ where: { Status: "CustomerAssignCab" }});
+            if (!customer!.id) { throw new Error('failure');}
+            console.log(customer!.id)
             await prisma.cabRevenue.create({
                 data: {
                     CabId: firstCab!.id,
+                    CustomerId: customer!.id,
                     Fare: collectedFare
                 }
             });

@@ -12,16 +12,21 @@ model Cabs {
   id        Int     @id @default(autoincrement())
   CabName   String
   Status    String
+
   CabRevenue CabRevenue[]
 }
 model Customers {
   id             Int     @id @default(autoincrement())
   CustomerName   String
   Status         String
+
+  CabRevenue CabRevenue[]
 }
 model CabRevenue {
   Id             Int     @id @default(autoincrement())
   Cab            Cabs?    @relation(fields: [CabId], references: [id])
   CabId          Int?
+  Customer       Customers?   @relation(fields: [CustomerId], references: [id])
+  CustomerId     Int?
   Fare           Int     @default(0)
 }

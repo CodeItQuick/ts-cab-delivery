@@ -17,8 +17,9 @@ async function cabPickUpCustomer() {
     const availableCab = await cabsRepository.findFirst(
         "CustomerRideRequested", "No assigned cab to pickup customer");
     const firstAvailableCustomer = await customerRepository.findFirst("InitialCabCall");
+    const customer = await CustomersRepository.update(firstAvailableCustomer?.id!, "CustomerAssignCab");
     await cabsRepository.update(availableCab.id!, "TransportingCustomer");
-    return CustomersRepository.update(firstAvailableCustomer?.id!, "CustomerAssignCab");
+    return customer;
 }
 
 async function cabDropOffCustomer() {
