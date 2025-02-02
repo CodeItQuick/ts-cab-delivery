@@ -6,8 +6,7 @@ function cabsRepository() {
         return cabsTable.create({
             data: {
                 CabName: "Evan's Cab",
-                Status: "Available",
-                Revenue: 0
+                Status: "Available"
             }
         });
     }
@@ -20,16 +19,21 @@ function cabsRepository() {
         let collectedFare = 0;
         if (status === 'TransportingCustomer') {
             collectedFare += 5;
+            await prisma.cabRevenue.create({
+                data: {
+                    CabId: firstCab!.id,
+                    Fare: 5
+                }
+            });
         }
         return cabsTable.update({
             where: {
                 id: firstCab!.id
             },
             data: {
-                Status: status,
-                Revenue: +firstCab!.Revenue.toString() + collectedFare
+                Status: status
             }
-        })
+        });
     }
     async function findFirst(status: string, errMessage: string = "No cabs found") {
         const firstCab = await cabsTable.findFirst({
