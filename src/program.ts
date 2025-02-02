@@ -1,7 +1,13 @@
 import inquirer from 'inquirer';
 import {TPrintLnObj} from "./printLn";
 import {addCab, removeCab} from "./fleetController";
-import {cabRideRequest, cabPickUpCustomer, customerCall, cabDropOffCustomer} from "./customerListController";
+import {
+    cabRideRequest,
+    cabPickUpCustomer,
+    customerCall,
+    cabDropOffCustomer,
+    customerCancelledRide
+} from "./customerListController";
 
 async function getPrompt(): Promise<string | undefined> {
     const prompt: { name?: string } = await
@@ -10,7 +16,9 @@ async function getPrompt(): Promise<string | undefined> {
 }
 
 const program = async function Program(
-    printLnObj: TPrintLnObj, promptFn: () => Promise<string | undefined> = getPrompt) {
+    printLnObj: TPrintLnObj,
+    promptFn: () => Promise<string | undefined> = getPrompt,
+    menuPrintLn: TPrintLnObj = printLnObj) {
     const menuOptions = [
         "0. Exit",
         "1. (Incoming Radio) Add New Cab Driver",
@@ -25,7 +33,7 @@ const program = async function Program(
     let prompt = undefined;
 
     while (prompt !== '0') {
-        menuOptions.forEach(x => console.log(x)); // Note: do not print menu to debug output
+        menuOptions.forEach(x => menuPrintLn.printLn(x)); // Note: do not print menu to debug output
 
         prompt = await promptFn();
 
@@ -51,7 +59,10 @@ const program = async function Program(
                 }
             }
             if (prompt !== undefined && +prompt === 4) {
-                printLnObj.printLn("Customer cancelled a ride.");
+                const customerRide = await customerCancelledRide();
+                if (!!customerRide) {
+                    printLnObj.printLn("Dispatch recorded customer cancelled a ride.");
+                }
             }
             if (prompt !== undefined && +prompt === 5) {
                 const assignCustomer = await cabRideRequest();

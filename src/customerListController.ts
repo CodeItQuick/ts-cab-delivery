@@ -123,7 +123,7 @@ async function cabDropOffCustomer() {
 async function customerCancelledRide() {
     const firstAvailableCustomer = await prisma.customers.findFirst({
         where: {
-            Status: "InitialCabCall"
+            Status: "InitialCustomerCall"
         }
     });
     if (!firstAvailableCustomer?.id) {
@@ -135,7 +135,6 @@ async function customerCancelledRide() {
         },
         data: {
             id: firstAvailableCustomer?.id ?? 0,
-            CustomerName: firstAvailableCustomer?.CustomerName ?? "",
             Status: "CustomerCancelledRide",
         }
     })
