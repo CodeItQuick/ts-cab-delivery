@@ -27,10 +27,16 @@ function cabsRepository() {
                 Status: status
             }
         });
-
+    }
+    function deleteItem(id: number) {
+        return prisma.cabs.delete({
+            where: {
+                id
+            }
+        });
     }
     return {
-        create, update, findFirst
+        create, update, findFirst, deleteItem
     }
 }
 

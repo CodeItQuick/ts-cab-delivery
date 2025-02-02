@@ -1,34 +1,17 @@
-import prisma from "./client";
+import cabsRepository from "./cabsRepository";
 
 // type cabStatus = 'Available' | 'TransportingCustomer' | 'CustomerRideRequested';
 
 async function addCab() {
-    return prisma.cabs.create({
-        data: {
-            CabName: "Evan's Cab",
-            Status: "Available"
-        }
-    });
+    return cabsRepository.create();
 }
 
 async function removeCab() {
-    const minId = await prisma.cabs.aggregate({
-        _min: {
-            id: true
-        },
-        where: {
-            Status: 'Available'
-        }
-    });
-    if (!minId?._min || !minId?._min?.id ) {
+    const cab = await cabsRepository.findFirst("Available");
+    if (!cab || !cab?.id ) {
         throw new Error("No available cabs");
     }
-    const minIdNumber = minId._min.id ?? 0;
-    return prisma.cabs.delete({
-        where: {
-            id: minIdNumber
-        }
-    });
+    return cabsRepository.deleteItem(cab.id!);
 }
 
 export { addCab, removeCab };
