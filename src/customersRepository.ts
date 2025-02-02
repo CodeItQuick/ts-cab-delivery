@@ -27,10 +27,16 @@ function customersRepository() {
                 Status: status
             }
         });
-
+    }
+    function deleteItem(id: number) {
+        return customersTable.delete({
+            where: {
+                id
+            }
+        });
     }
     return {
-        create, update, findFirst
+        create, update, findFirst, deleteItem
     }
 }
 

@@ -29,7 +29,7 @@ function cabsRepository() {
         });
     }
     function deleteItem(id: number) {
-        return prisma.cabs.delete({
+        return cabsTable.delete({
             where: {
                 id
             }
