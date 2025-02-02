@@ -29,4 +29,5 @@ model CabRevenue {
   Customer       Customers?   @relation(fields: [CustomerId], references: [id])
   CustomerId     Int?
   Fare           Int     @default(0)
+  CabCost        Int     @default(0)
 }
