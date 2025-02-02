@@ -21,12 +21,16 @@ function cabsRepository() {
             }
         })
     }
-    function findFirst(status: string) {
-        return cabsTable.findFirst({
+    async function findFirst(status: string, errMessage: string = "No cabs found") {
+        const firstCab = await cabsTable.findFirst({
             where: {
                 Status: status
             }
         });
+        if (!firstCab?.id) {
+            throw new Error(errMessage);
+        }
+        return firstCab;
     }
     function deleteItem(id: number) {
         return cabsTable.delete({

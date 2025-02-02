@@ -7,10 +7,7 @@ async function addCab() {
 }
 
 async function removeCab() {
-    const cab = await cabsRepository.findFirst("Available");
-    if (!cab || !cab?.id ) {
-        throw new Error("No available cabs");
-    }
+    const cab = await cabsRepository.findFirst("Available", "No available cabs");
     return cabsRepository.deleteItem(cab.id!);
 }
 

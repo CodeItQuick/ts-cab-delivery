@@ -21,12 +21,16 @@ function customersRepository() {
             }
         })
     }
-    function findFirst(status: string) {
-        return customersTable.findFirst({
+    async function findFirst(status: string, errMessage: string = "No customer found") {
+        const firstCustomer = await customersTable.findFirst({
             where: {
                 Status: status
             }
         });
+        if (!firstCustomer?.id) {
+            throw new Error(errMessage);
+        }
+        return firstCustomer;
     }
     function deleteItem(id: number) {
         return customersTable.delete({
