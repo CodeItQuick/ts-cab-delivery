@@ -1,6 +1,8 @@
 # Features
 1. **Application can handle calls after all cabs are occupied**
 2. **Improve UIUX - Interactive Menu**
+3. **Add Money Aspect - Take Revenue/Cash from Customers and track**
+
 
 # Maintenance
 1. **Build out Controller/Service/Repository Layer**

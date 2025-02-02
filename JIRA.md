@@ -10,5 +10,6 @@
 * Cab Drop Off Customer Endpoint
 * Customer Cancelled Ride Endpoint
 
-
+# Features
+* **Add Money Aspect - Take Revenue/Cash from Customers and track**
 
