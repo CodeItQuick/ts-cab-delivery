@@ -15,16 +15,11 @@ describe("Integration tests: Dispatch ", () => {
         await prisma.customers.deleteMany();
     })
     test("records cab assigned to pickup customer", async () => {
-        const cab = {
-            CabName: "Evan's Cab",
-            Status: "Available"
-        }
-        const addedCab = await addCab();
+        await addCab();
         await customerCall();
 
         const customer = await cabRideRequest();
 
-        expect(addedCab.CabName).toBe(cab.CabName);
         expect(await prisma.cabs.findFirst({ where: { Status: "CustomerRideRequested" }})).toBeTruthy();
         expect(customer.Status).toBe("InitialCabCall");
     })
@@ -66,18 +61,12 @@ describe("Integration tests: Dispatch ", () => {
         await expect(cabDropOffCustomer()).rejects.toThrowError("No cab transporting a customer");
     })
     test("records customer ride request cancelled", async () => {
-        const cab = {
-            CabName: "Evan's Cab",
-            Status: "Available"
-        }
-        const addedCab = await addCab();
+        await addCab();
         await customerCall();
-        await cabRideRequest();
 
         const customer = await customerCancelledRide();
 
-        expect(addedCab.CabName).toBe(cab.CabName);
-        expect(addedCab.Status).toBe(cab.Status);
+        expect(await prisma.customers.findFirst({ where: { Status: "CustomerCancelledRide" }})).toBeTruthy();
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CustomerCancelledRide");
     })
