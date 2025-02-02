@@ -37,8 +37,10 @@ describe("Integration tests: Dispatch ", () => {
 
         const customer = await cabPickUpCustomer();
 
-        expect(await prisma.cabs.findFirst({ where: { Status: "TransportingCustomer" }}))
-            .toBeTruthy();
+        const cabs = await prisma.cabs.findFirst({ where: { Status: "TransportingCustomer" }});
+
+        expect(cabs).toBeTruthy();
+        expect(cabs!.Revenue.toString()).toEqual("5");
         expect(customer).toBeTruthy();
         expect(customer.Status).toBe("CustomerAssignCab");
     })

@@ -17,13 +17,17 @@ function cabsRepository() {
                 id: id
             }
         });
+        let collectedFare = 0;
+        if (status === 'TransportingCustomer') {
+            collectedFare += 5;
+        }
         return cabsTable.update({
             where: {
                 id: firstCab!.id
             },
             data: {
                 Status: status,
-                Revenue: +firstCab!.Revenue.toString() + 5
+                Revenue: +firstCab!.Revenue.toString() + collectedFare
             }
         })
     }
