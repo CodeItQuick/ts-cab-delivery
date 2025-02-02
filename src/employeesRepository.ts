@@ -2,7 +2,7 @@ import prisma from "./client";
 
 function customersRepository() {
     const employeesTable = prisma.clockInEmployee;
-    // const timesheetTable = prisma.employeesTimesheet;
+    const timesheetTable = prisma.employeesTimesheet;
     function create() {
         return employeesTable.create({
             data: {
@@ -18,6 +18,75 @@ function customersRepository() {
             },
             data: {
                 CurrentWage: currentWage
+            }
+        })
+    }
+    function clockInTimesheet({
+                                 fullYear,
+                                 month,
+                                 day,
+                                 hour,
+                                 minute,
+                             }: {
+                                 fullYear: number;
+                                 month: string;
+                                 day: number;
+                                 hour: number;
+                                 minute: number
+                             },
+                              employeeId: number,
+                              wage: number) {
+        return timesheetTable.create({
+            data: {
+                ClockInEmployeeId: employeeId,
+                PaidWage: wage,
+                ClockInTimeYear: fullYear + '',
+                ClockInTimeMonth: month,
+                ClockInTimeDay: day,
+                ClockInTimeHour: hour,
+                ClockInTimeMinute: minute,
+                ClockOutTimeYear: '',
+                ClockOutTimeMonth: '',
+                ClockOutTimeDay: 0,
+                ClockOutTimeHour: 0,
+                ClockOutTimeMinute: 0
+            }
+        })
+    }
+    async function clockOutTimesheet({
+                                 fullYear,
+                                 month,
+                                 day,
+                                 hour,
+                                 minute,
+                             }: {
+                                 fullYear: number;
+                                 month: string;
+                                 day: number;
+                                 hour: number;
+                                 minute: number
+                             },
+                              employeeId: number) {
+        const timesheetEntry = await timesheetTable.findFirst({
+            where: {
+                ClockInEmployeeId: employeeId,
+                ClockOutTimeYear: '',
+                ClockOutTimeMonth: '',
+                ClockOutTimeDay: 0,
+                ClockOutTimeHour: 0,
+                ClockOutTimeMinute: 0
+            }
+        });
+        return timesheetTable.update({
+            where: {
+                id: timesheetEntry!.id
+            },
+            data: {
+                ClockOutTimeYear: fullYear + '',
+                ClockOutTimeMonth: month,
+                ClockOutTimeDay: day,
+                ClockOutTimeHour: hour,
+                ClockOutTimeMinute: minute
             }
         })
     }
@@ -43,7 +112,7 @@ function customersRepository() {
         });
     }
     return {
-        create, update, find, list
+        create, update, find, list, clockInTimesheet, clockOutTimesheet
     }
 }
 

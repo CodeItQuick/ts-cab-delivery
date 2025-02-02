@@ -47,4 +47,10 @@ model EmployeesTimesheet {
   ClockInTimeMonth        String
   ClockInTimeDay          Int
   ClockInTimeHour         Int
+  ClockInTimeMinute       Int
+  ClockOutTimeYear         String
+  ClockOutTimeMonth        String
+  ClockOutTimeDay          Int
+  ClockOutTimeHour         Int
+  ClockOutTimeMinute       Int
 }

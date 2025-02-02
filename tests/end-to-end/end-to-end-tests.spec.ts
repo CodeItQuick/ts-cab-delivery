@@ -16,8 +16,8 @@ describe("End-to-end tests", () => {
     beforeEach(async () => {
         await prisma.cabs.deleteMany();
         await prisma.customers.deleteMany();
-        await prisma.clockInEmployee.deleteMany();
         await prisma.employeesTimesheet.deleteMany();
+        await prisma.clockInEmployee.deleteMany();
     })
     test("program can select option 1 then 0", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
