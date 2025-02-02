@@ -31,3 +31,20 @@ model CabRevenue {
   Fare           Int     @default(0)
   CabCost        Int     @default(0)
 }
+model ClockInEmployee {
+  id        Int     @id @default(autoincrement())
+  EmployeeName   String
+  CurrentWage      Decimal
+
+  EmployeesTimesheet EmployeesTimesheet[]
+}
+model EmployeesTimesheet {
+  id                      Int               @id @default(autoincrement())
+  ClockInEmployee         ClockInEmployee   @relation(fields: [ClockInEmployeeId], references: [id])
+  ClockInEmployeeId       Int
+  PaidWage                Decimal
+  ClockInTimeYear         String
+  ClockInTimeMonth        String
+  ClockInTimeDay          Int
+  ClockInTimeHour         Int
+}
