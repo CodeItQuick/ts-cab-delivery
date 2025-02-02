@@ -12,6 +12,7 @@ model Cabs {
   id        Int     @id @default(autoincrement())
   CabName   String
   Status    String
+  Revenue   BigInt @default(0)
 }
 model Customers {
   id             Int     @id @default(autoincrement())

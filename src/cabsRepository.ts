@@ -6,18 +6,24 @@ function cabsRepository() {
         return cabsTable.create({
             data: {
                 CabName: "Evan's Cab",
-                Status: "Available"
+                Status: "Available",
+                Revenue: 0
             }
         });
     }
-    function update(id: number, status: string) {
+    async function update(id: number, status: string) {
+        const firstCab = await cabsTable.findFirst({
+            where: {
+                id: id
+            }
+        });
         return cabsTable.update({
             where: {
-                id: id ?? 0
+                id: firstCab!.id
             },
             data: {
-                id: id ?? 0,
-                Status: status
+                Status: status,
+                Revenue: +firstCab!.Revenue.toString() + 5
             }
         })
     }
