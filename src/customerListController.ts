@@ -1,11 +1,12 @@
 import prisma from "./client";
-import CustomerRepository from "./customerRepository";
-import customerRepository from "./customerRepository";
+import CustomersRepository from "./customersRepository";
+import customerRepository from "./customersRepository";
+import cabsRepository from "./cabsRepository";
 
 // type cabStatus = 'Available' | 'TransportingCustomer' | 'CustomerRideRequested';
 
 async function customerCall() {
-    return CustomerRepository.create();
+    return CustomersRepository.create();
 }
 async function cabRideRequest() {
     const availableCab = await prisma.cabs.findFirst({
@@ -20,16 +21,8 @@ async function cabRideRequest() {
     if (!firstAvailableCustomer?.id) {
         throw new Error("No customers have called in");
     }
-    await prisma.cabs.update({
-        where: {
-            id: availableCab?.id ?? 0
-        },
-        data: {
-            id: availableCab?.id ?? 0,
-            Status: "CustomerRideRequested",
-        }
-    })
-    return CustomerRepository.update(firstAvailableCustomer?.id!, "InitialCabCall");
+    await cabsRepository.update(availableCab.id!, "CustomerRideRequested");
+    return CustomersRepository.update(firstAvailableCustomer?.id!, "InitialCabCall");
 }
 async function cabPickUpCustomer() {
     const availableCab = await prisma.cabs.findFirst({
@@ -41,16 +34,8 @@ async function cabPickUpCustomer() {
         throw new Error("No assigned cab to pickup customer");
     }
     const firstAvailableCustomer = await customerRepository.findFirst("InitialCabCall");
-    await prisma.cabs.update({
-        where: {
-            id: availableCab?.id ?? 0
-        },
-        data: {
-            id: availableCab?.id ?? 0,
-            Status: "TransportingCustomer",
-        }
-    });
-    return CustomerRepository.update(firstAvailableCustomer?.id!, "CustomerAssignCab");
+    await cabsRepository.update(availableCab.id!, "TransportingCustomer");
+    return CustomersRepository.update(firstAvailableCustomer?.id!, "CustomerAssignCab");
 }
 
 async function cabDropOffCustomer() {
@@ -66,23 +51,15 @@ async function cabDropOffCustomer() {
     if (!firstAvailableCustomer?.id) {
         throw new Error("No customers available to drop off")
     }
-    await prisma.cabs.update({
-        where: {
-            id: availableCab?.id ?? 0
-        },
-        data: {
-            id: availableCab?.id ?? 0,
-            Status: "Available",
-        }
-    });
-    return CustomerRepository.update(firstAvailableCustomer?.id!, "CabDropOffCustomer");
+    await cabsRepository.update(availableCab.id!, "Available");
+    return CustomersRepository.update(firstAvailableCustomer?.id!, "CabDropOffCustomer");
 }
 async function customerCancelledRide() {
     const firstAvailableCustomer = await customerRepository.findFirst("InitialCustomerCall");
     if (!firstAvailableCustomer?.id) {
         throw new Error("No customers have called in")
     }
-    return CustomerRepository.update(firstAvailableCustomer?.id!, "CustomerCancelledRide");
+    return CustomersRepository.update(firstAvailableCustomer?.id!, "CustomerCancelledRide");
 }
 
 

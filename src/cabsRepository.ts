@@ -1,17 +1,17 @@
 import prisma from "./client";
 
-function customersRepository() {
-    const customersTable = prisma.customers;
+function cabsRepository() {
+    const cabsTable = prisma.cabs;
     function create() {
-        return customersTable.create({
+        return cabsTable.create({
             data: {
-                CustomerName: "Dan",
-                Status: "InitialCustomerCall"
+                CabName: "Evan's Cab",
+                Status: "Available"
             }
         });
     }
     function update(id: number, status: string) {
-        return prisma.customers.update({
+        return cabsTable.update({
             where: {
                 id: id ?? 0
             },
@@ -22,7 +22,7 @@ function customersRepository() {
         })
     }
     function findFirst(status: string) {
-        return prisma.customers.findFirst({
+        return cabsTable.findFirst({
             where: {
                 Status: status
             }
@@ -34,6 +34,6 @@ function customersRepository() {
     }
 }
 
-const CustomerRepository = customersRepository();
+const CabsRepository = cabsRepository();
 
-export default CustomerRepository;
+export default CabsRepository;
