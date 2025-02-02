@@ -8,6 +8,7 @@ import {
     cabDropOffCustomer,
     customerCancelledRide
 } from "./customerListController";
+import {createEmployee, employeeList} from "./employeeController";
 
 async function getPrompt(): Promise<string | undefined> {
     const prompt: { name?: string } = await
@@ -28,6 +29,8 @@ const program = async function Program(
         "5. (Outgoing Radio) Send Cab Driver Ride Request",
         "6. (Incoming Radio) Cab Notifies Passenger Picked Up",
         "7. (Incoming Radio) Cab Notifies Passenger Dropped Off",
+        "8. (Employee Tracking) Create New Employee Entry",
+        "9. (Employee Tracking) List All Current Employees"
     ];
 
     let prompt = undefined;
@@ -80,6 +83,19 @@ const program = async function Program(
                 const customerRide = await cabDropOffCustomer();
                 if (!!customerRide) {
                     printLnObj.printLn("Dispatch recorded customer is dropped off.");
+                }
+            }
+            if (prompt !== undefined && +prompt === 8) {
+                const employee = await createEmployee();
+                if (!!employee) {
+                    printLnObj.printLn("Created a new employee for time tracking.");
+                }
+            }
+            if (prompt !== undefined && +prompt === 9) {
+                const employees = await employeeList();
+                if (!!employees) {
+                    menuPrintLn.printLn("Employee#\tName\tWage");
+                    employees.forEach(employee => printLnObj.printLn(`${employee.id}\t${employee.EmployeeName}\t${employee.CurrentWage}`))
                 }
             }
         }

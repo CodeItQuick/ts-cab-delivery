@@ -16,6 +16,8 @@ describe("End-to-end tests", () => {
     beforeEach(async () => {
         await prisma.cabs.deleteMany();
         await prisma.customers.deleteMany();
+        await prisma.clockInEmployee.deleteMany();
+        await prisma.employeesTimesheet.deleteMany();
     })
     test("program can select option 1 then 0", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
@@ -102,5 +104,19 @@ describe("End-to-end tests", () => {
         expect(printLnFn.messages).toContain("Dispatch recorded cab was added.");
         expect(printLnFn.messages).toContain("Dispatch received customer call for a ride.");
         expect(printLnFn.messages).toContain("Dispatch recorded customer cancelled a ride.");
+    })
+    test("program can create a new employee", async () => {
+        const printLnFn = { ...testPrintLnObj, messages: [] };
+
+        await program(printLnFn, messageReader(["8", "0"]));
+
+        expect(printLnFn.messages).toContain("Created a new employee for time tracking.");
+    })
+    test("program can list all current employees", async () => {
+        const printLnFn: typeof testPrintLnObj = { ...testPrintLnObj, messages: [] };
+
+        await program(printLnFn, messageReader(["8", "8", "8", "9", "0"]));
+
+        expect(printLnFn.messages.filter(message => message.includes("Evan\t10")).length).toEqual(3);
     })
 })

@@ -32,8 +32,18 @@ function customersRepository() {
         }
         return employee;
     }
+    function list() {
+        return employeesTable.findMany({
+            select: {
+                id: true,
+                EmployeeName: true,
+                CurrentWage: true,
+
+            }
+        });
+    }
     return {
-        create, update, find
+        create, update, find, list
     }
 }
 

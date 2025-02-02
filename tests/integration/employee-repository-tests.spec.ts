@@ -31,4 +31,12 @@ describe("Employee Repository Integration tests", () => {
         expect(employee.CurrentWage.toString()).toEqual("10");
         expect(employee.EmployeeName).toEqual("Evan");
     })
+    test("can list all existing employees", async () => {
+        await employeeRepository.create();
+        await employeeRepository.create();
+
+        const employees = await employeeRepository.list();
+
+        expect(employees.length).toEqual(2);
+    })
 })
