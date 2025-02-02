@@ -16,13 +16,12 @@ function cabsRepository() {
                 id: id
             }
         });
-        let collectedFare = 0;
         if (status === 'TransportingCustomer') {
-            collectedFare += 5;
+            const collectedFare = 5;
             await prisma.cabRevenue.create({
                 data: {
                     CabId: firstCab!.id,
-                    Fare: 5
+                    Fare: collectedFare
                 }
             });
         }
