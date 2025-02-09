@@ -8,7 +8,7 @@ import {
     cabDropOffCustomer,
     customerCancelledRide
 } from "./customerListController";
-import {createEmployee, employeeList} from "./employeeController";
+import {createEmployee, deleteEmployee, employeeList} from "./employeeController";
 
 async function getPrompt(): Promise<string | undefined> {
     const prompt: { name?: string } = await
@@ -30,7 +30,8 @@ const program = async function Program(
         "6. (Incoming Radio) Cab Notifies Passenger Picked Up",
         "7. (Incoming Radio) Cab Notifies Passenger Dropped Off",
         "8. (Employee Tracking) Create New Employee Entry",
-        "9. (Employee Tracking) List All Current Employees"
+        "9. (Employee Tracking) List All Current Employees",
+        "10. (Employee Tracking) Delete Employee Entry"
     ];
 
     let prompt = undefined;
@@ -97,6 +98,18 @@ const program = async function Program(
                     menuPrintLn.printLn("Employee#\tName\tWage");
                     employees.forEach(employee =>
                         printLnObj.printLn(`${employee.id}\t${employee.EmployeeName}\t${employee.CurrentWage}`))
+                }
+            }
+            if (prompt !== undefined && +prompt === 10) {
+                const deletedEmployeeNumber = await promptFn();
+                if (deletedEmployeeNumber === undefined) {
+                    throw new Error("Not a valid employee id");
+                }
+                const employeeId = +deletedEmployeeNumber;
+                const employees = await deleteEmployee(employeeId);
+                if (!!employees) {
+                    printLnObj.printLn("Deleted an employee from time tracking.");
+                    printLnObj.printLn("Employee#\tName\tWage");
                 }
             }
         }

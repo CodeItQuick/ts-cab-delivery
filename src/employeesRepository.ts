@@ -11,6 +11,13 @@ function customersRepository() {
             }
         });
     }
+    function deleteEmployee(employeeId: number) {
+        return employeesTable.delete({
+            where: {
+                id: employeeId
+            }
+        });
+    }
     function update(id: number, currentWage: number) {
         return employeesTable.update({
             where: {
@@ -112,7 +119,7 @@ function customersRepository() {
         });
     }
     return {
-        create, update, find, list, clockInTimesheet, clockOutTimesheet
+        create, deleteEmployee, update, find, list, clockInTimesheet, clockOutTimesheet
     }
 }
 

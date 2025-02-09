@@ -1,6 +1,13 @@
 import prisma from "../../src/client";
 import {beforeEach, describe, expect, test} from "@jest/globals";
-import {clockIn, clockOut, createEmployee, employeeList, promoteEmployee} from "../../src/employeeController";
+import {
+    clockIn,
+    clockOut,
+    createEmployee,
+    deleteEmployee,
+    employeeList,
+    promoteEmployee
+} from "../../src/employeeController";
 
 describe("Employee Repository Integration tests", () => {
     beforeEach(async () => {
@@ -9,12 +16,19 @@ describe("Employee Repository Integration tests", () => {
         await prisma.employeesTimesheet.deleteMany();
         await prisma.clockInEmployee.deleteMany();
     });
-
     test("can create a new employee", async () => {
         const employee = await createEmployee();
 
         expect(employee.CurrentWage.toString()).toEqual("10");
         expect(employee.EmployeeName).toEqual("Evan");
+    });
+    test("can delete a new employee", async () => {
+        const newEmployee = await createEmployee();
+
+        const deletedEmployee = await deleteEmployee(newEmployee.id);
+
+        expect(deletedEmployee.CurrentWage.toString()).toEqual("10");
+        expect(deletedEmployee.EmployeeName).toEqual("Evan");
     });
     test("can promote an existing employee", async () => {
         const employeeWithId = await createEmployee();

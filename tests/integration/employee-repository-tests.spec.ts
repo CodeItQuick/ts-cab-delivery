@@ -7,10 +7,9 @@ describe("Employee Repository Integration tests", () => {
     beforeEach(async () => {
         await prisma.cabs.deleteMany();
         await prisma.customers.deleteMany();
-        await prisma.clockInEmployee.deleteMany();
         await prisma.employeesTimesheet.deleteMany();
+        await prisma.clockInEmployee.deleteMany();
     });
-
     test("can create a new employee", async () => {
         const employee = await employeeRepository.create();
 
@@ -38,5 +37,13 @@ describe("Employee Repository Integration tests", () => {
         const employees = await employeeRepository.list();
 
         expect(employees.length).toEqual(2);
+    });
+    test("can delete an existing employee", async () => {
+        const employeeWithId = await employeeRepository.create();
+
+        const employeeDeleted = await employeeRepository.deleteEmployee(employeeWithId.id);
+
+        expect(employeeDeleted.CurrentWage.toString()).toEqual("10");
+        expect(employeeDeleted.EmployeeName).toEqual("Evan");
     });
 })

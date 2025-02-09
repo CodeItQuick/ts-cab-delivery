@@ -112,6 +112,25 @@ describe("End-to-end tests", () => {
 
         expect(printLnFn.messages).toContain("Created a new employee for time tracking.");
     });
+    test("program can delete a new employee", async () => {
+        const printLnFn: typeof testPrintLnObj = { ...testPrintLnObj, messages: [] as string[] };
+        await program(printLnFn, getPrompt(["8", "9", "0"]));
+        const findId = printLnFn.messages.find(x => x.includes("\tEvan\t10"))!.split('\t')[0];
+
+        await program(printLnFn, getPrompt(["10", findId, "0"]));
+
+        expect(printLnFn.messages).toContain("Created a new employee for time tracking.");
+        expect(printLnFn.messages).toContain("Deleted an employee from time tracking.");
+    });
+    test("program can handle incorrect input when deleting an employee", async () => {
+        const printLnFn: typeof testPrintLnObj = { ...testPrintLnObj, messages: [] as string[] };
+        await program(printLnFn, getPrompt(["8", "9", "0"]));
+
+        await program(printLnFn, getPrompt(["10", "-9", "0"]));
+
+        expect(printLnFn.messages).toContain("Created a new employee for time tracking.");
+        expect(printLnFn.messages.find(x => x === "Deleted an employee from time tracking.")?.length).toBeFalsy();
+    });
     test("program can list all current employees", async () => {
         const printLnFn: typeof testPrintLnObj = { ...testPrintLnObj, messages: [] };
 

@@ -3,9 +3,11 @@ import employeesRepository from "./employeesRepository";
 async function createEmployee() {
     return employeesRepository.create();
 }
+async function deleteEmployee(employeeId: number) {
+    return employeesRepository.deleteEmployee(employeeId);
+}
 async function promoteEmployee(employeeId: number, wage: number) {
-    const promotedEmployee = await employeesRepository.update(employeeId, wage);
-    return promotedEmployee;
+    return employeesRepository.update(employeeId, wage);
 }
 async function employeeList() {
     return employeesRepository.list();
@@ -45,4 +47,4 @@ async function clockOut(employeeId: number, now: Date = new Date()) {
     return employeesRepository.clockOutTimesheet(timeSheetEntry, employeeWithId.id);
 }
 
-export { createEmployee, promoteEmployee, employeeList, clockIn, clockOut };
+export { createEmployee, deleteEmployee, promoteEmployee, employeeList, clockIn, clockOut };
