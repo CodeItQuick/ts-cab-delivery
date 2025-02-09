@@ -18,14 +18,14 @@ describe("End-to-end tests", () => {
         await prisma.customers.deleteMany();
         await prisma.employeesTimesheet.deleteMany();
         await prisma.clockInEmployee.deleteMany();
-    })
+    });
     test("program can select option 1 then 0", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
         await program(printLnFn, getPrompt(["1", "0"]));
 
         expect(printLnFn.messages).toContain("Dispatch recorded cab was added.");
-    })
+    });
     test("program can remove a cab", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
@@ -33,14 +33,14 @@ describe("End-to-end tests", () => {
 
         expect(printLnFn.messages).toContain("Dispatch recorded cab was added.");
         expect(printLnFn.messages).toContain("Dispatch recorded cab was removed.");
-    })
+    });
     test("program reports if no cab removed", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
         await program(printLnFn, getPrompt(["2", "0"]));
 
         expect(printLnFn.messages).toContain("No available cabs");
-    })
+    });
     test("program can take a customer call", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
@@ -48,7 +48,7 @@ describe("End-to-end tests", () => {
 
         expect(printLnFn.messages).toContain("Dispatch recorded cab was added.");
         expect(printLnFn.messages).toContain("Dispatch received customer call for a ride.");
-    })
+    });
     test("program can assign a cab", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
@@ -57,7 +57,7 @@ describe("End-to-end tests", () => {
         expect(printLnFn.messages).toContain("Dispatch recorded cab was added.");
         expect(printLnFn.messages).toContain("Dispatch received customer call for a ride.");
         expect(printLnFn.messages).toContain("Dispatch recorded cab requested.");
-    })
+    });
     test("program can pickup a customer", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
@@ -67,7 +67,7 @@ describe("End-to-end tests", () => {
         expect(printLnFn.messages).toContain("Dispatch received customer call for a ride.");
         expect(printLnFn.messages).toContain("Dispatch recorded cab requested.");
         expect(printLnFn.messages).toContain("Dispatch recorded cab has picked up customer."); // TODO: change message
-    })
+    });
     test("program can drop off a cab", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
@@ -78,7 +78,7 @@ describe("End-to-end tests", () => {
         expect(printLnFn.messages).toContain("Dispatch recorded cab requested.");
         expect(printLnFn.messages).toContain("Dispatch recorded cab has picked up customer.");
         expect(printLnFn.messages).toContain("Dispatch recorded customer is dropped off.");
-    })
+    });
     test("program can drop off multiple customer calls with a single cab", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
@@ -86,7 +86,7 @@ describe("End-to-end tests", () => {
 
         expect(printLnFn.messages).toContain("Dispatch recorded cab was added.");
         expect(printLnFn.messages.filter(x => x === "Dispatch recorded customer is dropped off.").length).toEqual(2);
-    })
+    });
     test("program can drop off and handle a cancel request for multiple customers", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
@@ -95,7 +95,7 @@ describe("End-to-end tests", () => {
         expect(printLnFn.messages).toContain("Dispatch recorded cab was added.");
         expect(printLnFn.messages).toContain("Dispatch recorded customer is dropped off.");
         expect(printLnFn.messages).toContain("Dispatch recorded customer cancelled a ride.");
-    })
+    });
     test("program can cancel a cab", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
@@ -104,19 +104,19 @@ describe("End-to-end tests", () => {
         expect(printLnFn.messages).toContain("Dispatch recorded cab was added.");
         expect(printLnFn.messages).toContain("Dispatch received customer call for a ride.");
         expect(printLnFn.messages).toContain("Dispatch recorded customer cancelled a ride.");
-    })
+    });
     test("program can create a new employee", async () => {
         const printLnFn = { ...testPrintLnObj, messages: [] };
 
         await program(printLnFn, getPrompt(["8", "0"]));
 
         expect(printLnFn.messages).toContain("Created a new employee for time tracking.");
-    })
+    });
     test("program can list all current employees", async () => {
         const printLnFn: typeof testPrintLnObj = { ...testPrintLnObj, messages: [] };
 
         await program(printLnFn, getPrompt(["8", "8", "8", "9", "0"]));
 
         expect(printLnFn.messages.filter(message => message.includes("Evan\t10")).length).toEqual(3);
-    })
-})
+    });
+});

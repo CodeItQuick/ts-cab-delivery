@@ -8,14 +8,14 @@ describe("Employee Repository Integration tests", () => {
         await prisma.customers.deleteMany();
         await prisma.employeesTimesheet.deleteMany();
         await prisma.clockInEmployee.deleteMany();
-    })
+    });
 
     test("can create a new employee", async () => {
         const employee = await createEmployee();
 
         expect(employee.CurrentWage.toString()).toEqual("10");
         expect(employee.EmployeeName).toEqual("Evan");
-    })
+    });
     test("can promote an existing employee", async () => {
         const employeeWithId = await createEmployee();
 
@@ -23,13 +23,13 @@ describe("Employee Repository Integration tests", () => {
 
         expect(employee.CurrentWage.toString()).toEqual("20");
         expect(employee.EmployeeName).toEqual("Evan");
-    })
+    });
     test("can list all current employees", async () => {
         const employees = await employeeList();
 
         expect(employees.length).toEqual(0);
         expect(typeof employees).toEqual("object")
-    })
+    });
     test("can list all current employees", async () => {
         await createEmployee();
         await createEmployee();
@@ -38,7 +38,7 @@ describe("Employee Repository Integration tests", () => {
         const employees = await employeeList();
 
         expect(employees.length).toEqual(3);
-    })
+    });
     test("can clock into the timesheet system", async () => {
         const employeeWithId = await createEmployee();
 
@@ -50,7 +50,7 @@ describe("Employee Repository Integration tests", () => {
         expect(timesheetEntry.ClockInTimeDay).toEqual(2);
         expect(timesheetEntry.ClockInTimeHour).toEqual(15);
         expect(timesheetEntry.ClockInTimeMinute).toEqual(38);
-    })
+    });
     test("can clock out of the timesheet system", async () => {
         const employeeWithId = await createEmployee();
         await clockIn(employeeWithId.id, new Date("Sun Feb 02 2025 15:38:25 GMT-0400 (Atlantic Standard Time)"));
@@ -69,5 +69,5 @@ describe("Employee Repository Integration tests", () => {
         expect(timesheetEntry.ClockOutTimeDay).toEqual(2);
         expect(timesheetEntry.ClockOutTimeHour).toEqual(16);
         expect(timesheetEntry.ClockOutTimeMinute).toEqual(38);
-    })
-})
+    });
+});
