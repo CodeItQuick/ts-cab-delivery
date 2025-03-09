@@ -2,7 +2,7 @@ import {describe, expect, test} from "@jest/globals";
 import {TableAdapterFn} from "../../src/tableAdapterFn";
 import {Employee} from "../../src/clockInEmployeeTableAdapterFn";
 
-function testableEmployeeRepository(): TableAdapterFn<Employee> {
+function testableEmployeeTableAdapter(): TableAdapterFn<Employee> {
     const entities: Employee[] = [];
     const create = async (entity: Employee) => {
         entities.push({ ...entity, id: entities.length + 1 });
@@ -42,46 +42,46 @@ function testableEmployeeRepository(): TableAdapterFn<Employee> {
 
 describe("Employee Repository Integration tests", () => {
     test("can update a new employee", async () => {
-        const employeeRepository = testableEmployeeRepository();
+        const employeeTableAdapterFn = testableEmployeeTableAdapter();
         const employeeOne: Employee = { id: 1, CurrentWage: 10, EmployeeName: "Evan" };
-        await employeeRepository.create(employeeOne);
+        await employeeTableAdapterFn.create(employeeOne);
 
-        await employeeRepository.updateBy(employeeOne, "EmployeeName");
+        await employeeTableAdapterFn.updateBy(employeeOne, "EmployeeName");
 
-        const employeeFound = await employeeRepository.find(employeeOne.id as number);
+        const employeeFound = await employeeTableAdapterFn.find(employeeOne.id as number);
         expect(employeeFound?.EmployeeName).toEqual("Evan");
     });
     test("can delete a new employee", async () => {
-        const employeeRepository = testableEmployeeRepository();
+        const employeeTableAdapterFn = testableEmployeeTableAdapter();
         const employeeOne: Employee = { id: 1, CurrentWage: 10, EmployeeName: "Evan" };
-        await employeeRepository.create(employeeOne);
-        await employeeRepository.deleteEntity(employeeOne.id as number);
+        await employeeTableAdapterFn.create(employeeOne);
+        await employeeTableAdapterFn.deleteEntity(employeeOne.id as number);
 
-        const foundEmployee = await employeeRepository
+        const foundEmployee = await employeeTableAdapterFn
             .find(employeeOne.id as number);
 
         expect(foundEmployee).toEqual(undefined);
     });
     test("can delete the second employee", async () => {
-        const employeeRepository = testableEmployeeRepository();
+        const employeeTableAdapterFn = testableEmployeeTableAdapter();
         const employeeOne: Employee = { CurrentWage: 10, EmployeeName: "Evan" };
-        await employeeRepository.create(employeeOne);
-        await employeeRepository.create(employeeOne);
-        await employeeRepository.create(employeeOne);
+        await employeeTableAdapterFn.create(employeeOne);
+        await employeeTableAdapterFn.create(employeeOne);
+        await employeeTableAdapterFn.create(employeeOne);
 
-        await employeeRepository.deleteEntity(2);
+        await employeeTableAdapterFn.deleteEntity(2);
 
-        expect(await employeeRepository.find(1)).toBeTruthy();
-        expect(await employeeRepository.find(2)).toEqual(undefined);
-        expect(await employeeRepository.find(3)).toBeTruthy();
+        expect(await employeeTableAdapterFn.find(1)).toBeTruthy();
+        expect(await employeeTableAdapterFn.find(2)).toEqual(undefined);
+        expect(await employeeTableAdapterFn.find(3)).toBeTruthy();
     });
     test("can list all current employees", async () => {
-        const employeeRepository = testableEmployeeRepository();
+        const employeeTableAdapterFn = testableEmployeeTableAdapter();
         const employeeOne: Employee = { CurrentWage: 10, EmployeeName: "Evan" };
-        await employeeRepository.create(employeeOne);
-        await employeeRepository.create(employeeOne);
+        await employeeTableAdapterFn.create(employeeOne);
+        await employeeTableAdapterFn.create(employeeOne);
 
-        const employees = await employeeRepository.list(
+        const employees = await employeeTableAdapterFn.list(
             { id: true, EmployeeName: true, CurrentWage: true });
 
         expect(employees.length).toEqual(2);
