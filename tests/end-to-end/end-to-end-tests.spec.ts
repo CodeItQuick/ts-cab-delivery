@@ -115,7 +115,8 @@ describe("End-to-end tests", () => {
     test("program can delete a new employee", async () => {
         const printLnFn: typeof testPrintLnObj = { ...testPrintLnObj, messages: [] as string[] };
         await program(printLnFn, getPrompt(["8", "9", "0"]));
-        const findId = printLnFn.messages.find(x => x.includes("\tEvan\t10"))!.split('\t')[0];
+        const findId = printLnFn.messages
+            .find(x => x.includes("\tEvan\t10"))!.split('\t')[0];
 
         await program(printLnFn, getPrompt(["10", findId, "0"]));
 

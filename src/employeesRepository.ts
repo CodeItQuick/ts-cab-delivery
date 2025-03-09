@@ -1,34 +1,28 @@
 import prisma from "./client";
+import {clockInEmployeeTableAdapterFn} from "./clockInEmployeeTableAdapterFn";
+import {employeesTimesheetTableAdapterFn} from "./employeesTimesheetTableAdapterFn";
 
-function customersRepository() {
-    const employeesTable = prisma.clockInEmployee;
+function customersRepository(table: typeof prisma.clockInEmployee = prisma.clockInEmployee) {
+    const employeeTable = clockInEmployeeTableAdapterFn(table);
+    const timesheetsTable = employeesTimesheetTableAdapterFn(prisma.employeesTimesheet);
     const timesheetTable = prisma.employeesTimesheet;
-    function create() {
-        return employeesTable.create({
-            data: {
+    async function create() {
+        const entityId = await employeeTable.create({
                 CurrentWage: 10,
                 EmployeeName: "Evan"
-            }
         });
+        return employeeTable.find(entityId)
     }
-    function deleteEmployee(employeeId: number) {
-        return employeesTable.delete({
-            where: {
-                id: employeeId
-            }
-        });
+    async function deleteEmployee(employeeId: number) {
+        const deletedElement = await employeeTable.find(employeeId);
+        await employeeTable.deleteEntity(employeeId);
+        return deletedElement;
     }
-    function update(id: number, currentWage: number) {
-        return employeesTable.update({
-            where: {
-                id: id
-            },
-            data: {
-                CurrentWage: currentWage
-            }
-        })
+    async function update(id: number, currentWage: number) {
+        await employeeTable.updateBy({ id, CurrentWage: currentWage }, "CurrentWage");
+        return employeeTable.find(id);
     }
-    function clockInTimesheet({
+    async function clockInTimesheet({
                                  fullYear,
                                  month,
                                  day,
@@ -43,8 +37,7 @@ function customersRepository() {
                              },
                               employeeId: number,
                               wage: number) {
-        return timesheetTable.create({
-            data: {
+        const timesheetTableId = await timesheetsTable.create({
                 ClockInEmployeeId: employeeId,
                 PaidWage: wage,
                 ClockInTimeYear: fullYear + '',
@@ -57,8 +50,8 @@ function customersRepository() {
                 ClockOutTimeDay: 0,
                 ClockOutTimeHour: 0,
                 ClockOutTimeMinute: 0
-            }
-        })
+        });
+        return timesheetsTable.find(timesheetTableId);
     }
     async function clockOutTimesheet({
                                  fullYear,
@@ -98,24 +91,17 @@ function customersRepository() {
         })
     }
     async function find(id: number, errMessage: string = "No employee found") {
-        const employee = await employeesTable.findFirst({
-            where: {
-                id
-            }
-        });
+        const employee = await employeeTable.find(id);
         if (!employee?.id) {
             throw new Error(errMessage);
         }
         return employee;
     }
     function list() {
-        return employeesTable.findMany({
-            select: {
+        return employeeTable.list({
                 id: true,
                 EmployeeName: true,
                 CurrentWage: true,
-
-            }
         });
     }
     return {

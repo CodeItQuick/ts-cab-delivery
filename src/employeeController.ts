@@ -27,7 +27,7 @@ async function clockIn(employeeId: number, now: Date = new Date()) {
         minute
     };
     const employeeWithId = await employeesRepository.find(employeeId);
-    return employeesRepository.clockInTimesheet(timeSheetEntry, employeeWithId.id, +employeeWithId.CurrentWage);
+    return employeesRepository.clockInTimesheet(timeSheetEntry, employeeWithId?.id!, +employeeWithId?.CurrentWage!);
 }
 async function clockOut(employeeId: number, now: Date = new Date()) {
     const fullYear = now.getFullYear();
@@ -44,7 +44,7 @@ async function clockOut(employeeId: number, now: Date = new Date()) {
         minute
     };
     const employeeWithId = await employeesRepository.find(employeeId);
-    return employeesRepository.clockOutTimesheet(timeSheetEntry, employeeWithId.id);
+    return employeesRepository.clockOutTimesheet(timeSheetEntry, employeeWithId?.id!);
 }
 
 export { createEmployee, deleteEmployee, promoteEmployee, employeeList, clockIn, clockOut };

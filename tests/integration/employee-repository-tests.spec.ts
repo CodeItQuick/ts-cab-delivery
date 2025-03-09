@@ -13,21 +13,21 @@ describe("Employee Repository Integration tests", () => {
     test("can create a new employee", async () => {
         const employee = await employeeRepository.create();
 
-        expect(employee.CurrentWage.toString()).toEqual("10");
-        expect(employee.EmployeeName).toEqual("Evan");
+        expect(employee?.CurrentWage?.toString()).toEqual("10");
+        expect(employee!.EmployeeName).toEqual("Evan");
     });
     test("can promote an existing employee", async () => {
         const employeeWithId = await employeeRepository.create();
-        const employee = await employeeRepository.update(employeeWithId!.id, 20);
+        const employee = await employeeRepository.update(employeeWithId?.id || 0, 20);
 
-        expect(employee.CurrentWage.toString()).toEqual("20");
-        expect(employee.EmployeeName).toEqual("Evan");
+        expect(employee?.CurrentWage?.toString()).toEqual("20");
+        expect(employee?.EmployeeName).toEqual("Evan");
     });
     test("can find an existing employee", async () => {
         const employeeWithId = await employeeRepository.create();
-        const employee = await employeeRepository.find(employeeWithId!.id);
+        const employee = await employeeRepository.find(employeeWithId?.id || 0);
 
-        expect(employee.CurrentWage.toString()).toEqual("10");
+        expect(employee!.CurrentWage?.toString()).toEqual("10");
         expect(employee.EmployeeName).toEqual("Evan");
     });
     test("can list all existing employees", async () => {
@@ -41,9 +41,9 @@ describe("Employee Repository Integration tests", () => {
     test("can delete an existing employee", async () => {
         const employeeWithId = await employeeRepository.create();
 
-        const employeeDeleted = await employeeRepository.deleteEmployee(employeeWithId.id);
+        const employeeDeleted = await employeeRepository.deleteEmployee(employeeWithId?.id || 0);
 
-        expect(employeeDeleted.CurrentWage.toString()).toEqual("10");
-        expect(employeeDeleted.EmployeeName).toEqual("Evan");
+        expect(employeeDeleted!.CurrentWage?.toString()).toEqual("10");
+        expect(employeeDeleted!.EmployeeName).toEqual("Evan");
     });
 })
