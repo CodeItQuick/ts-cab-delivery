@@ -1,7 +1,7 @@
 import prisma from "./client";
 import {TableAdapterFn} from "./tableAdapterFn";
 
-type Timesheet = {
+export type Timesheet = {
     id?: number;
     ClockInEmployeeId: number;
     PaidWage: number;

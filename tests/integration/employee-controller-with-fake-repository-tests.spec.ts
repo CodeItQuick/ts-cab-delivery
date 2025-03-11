@@ -1,6 +1,8 @@
 import {describe, expect, test} from "@jest/globals";
 import {TableAdapterFn} from "../../src/tableAdapterFn";
 import {Employee} from "../../src/clockInEmployeeTableAdapterFn";
+import {EmployeeService} from "../../src/employeeController";
+import {customersRepository} from "../../src/employeesRepository";
 
 function testableEmployeeTableAdapter(): TableAdapterFn<Employee> {
     const entities: Employee[] = [];
@@ -39,8 +41,12 @@ function testableEmployeeTableAdapter(): TableAdapterFn<Employee> {
     }
     return { updateBy, find, create, deleteEntity, list };
 }
-
-describe("Employee Repository Integration tests", () => {
+describe("EmployeeService fake service tests", () => {
+    test("can clockIn an employee", async () => {
+        EmployeeService(customersRepository());
+    })
+})
+describe("Employee Repository fake repository tests", () => {
     test("can update a new employee", async () => {
         const employeeTableAdapterFn = testableEmployeeTableAdapter();
         const employeeOne: Employee = { id: 1, CurrentWage: 10, EmployeeName: "Evan" };

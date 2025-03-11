@@ -1,10 +1,11 @@
 import prisma from "./client";
-import {clockInEmployeeTableAdapterFn} from "./clockInEmployeeTableAdapterFn";
-import {employeesTimesheetTableAdapterFn} from "./employeesTimesheetTableAdapterFn";
+import {clockInEmployeeTableAdapterFn, Employee} from "./clockInEmployeeTableAdapterFn";
+import {employeesTimesheetTableAdapterFn, Timesheet} from "./employeesTimesheetTableAdapterFn";
+import {TableAdapterFn} from "./tableAdapterFn";
 
-function customersRepository(table: typeof prisma.clockInEmployee = prisma.clockInEmployee) {
-    const employeeTable = clockInEmployeeTableAdapterFn(table);
-    const timesheetsTable = employeesTimesheetTableAdapterFn(prisma.employeesTimesheet);
+export function customersRepository(employeeTableAdapterFn: TableAdapterFn<Employee> = clockInEmployeeTableAdapterFn(prisma.clockInEmployee), timesheetTableAdapterFn: TableAdapterFn<Timesheet> = employeesTimesheetTableAdapterFn(prisma.employeesTimesheet)) {
+    const employeeTable = employeeTableAdapterFn;
+    const timesheetsTable = timesheetTableAdapterFn;
     const timesheetTable = prisma.employeesTimesheet;
     async function create() {
         const entityId = await employeeTable.create({
